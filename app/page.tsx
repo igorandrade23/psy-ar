@@ -1,5 +1,5 @@
-import { AppShell } from "@/app/components/AppShell";
+import { TimelineArExperience } from "@/app/features/ar-timeline/components/TimelineArExperience";
 
 export default function Page() {
-  return <AppShell />;
+  return <TimelineArExperience />;
 }
