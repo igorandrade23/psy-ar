@@ -83,21 +83,14 @@ export function ArScene({ entry, onError }: ArSceneProps) {
             embedded
             vr-mode-ui="enabled: false"
             device-orientation-permission-ui="enabled: false"
-            arjs="sourceType: webcam; videoTexture: true; debugUIEnabled: false; patternRatio: 0.5; labelingMode: black_region;"
+            arjs="sourceType: webcam; videoTexture: true; debugUIEnabled: false;"
             renderer="alpha: true; antialias: true;"
           >
             <a-assets timeout="15000">
               <img id="timeline-portrait" crossOrigin="anonymous" />
             </a-assets>
 
-            <a-marker
-              type="pattern"
-              url="/markers/psy-qr-marker.patt"
-              smooth="true"
-              smoothCount="6"
-              smoothTolerance="0.01"
-              smoothThreshold="3"
-            >
+            <a-marker preset="hiro" smooth="true" smoothCount="6" smoothTolerance="0.01" smoothThreshold="3">
               <a-entity position="0 1.08 0">
                 <a-plane
                   id="timeline-card-base"

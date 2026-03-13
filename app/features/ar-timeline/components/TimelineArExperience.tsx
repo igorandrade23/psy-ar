@@ -48,7 +48,7 @@ export function TimelineArExperience() {
       {!sceneError ? (
         <div className="pointer-events-none absolute left-1/2 top-1/2 z-10 w-[min(26rem,calc(100vw-2rem))] -translate-x-1/2 -translate-y-1/2 text-center">
           <div className="mx-auto inline-flex rounded-full border border-white/10 bg-slate-950/68 px-4 py-2 text-xs uppercase tracking-[0.22em] text-white/60 shadow-[0_14px_40px_rgba(0,0,0,0.3)] ring-1 ring-white/10 backdrop-blur-xl">
-            Point your camera at the custom marker
+            Point your camera at the Hiro marker
           </div>
         </div>
       ) : null}
