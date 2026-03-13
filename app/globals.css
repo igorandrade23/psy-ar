@@ -1,0 +1,102 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+  --page-bg: #081018;
+  --page-fg: #edf4fa;
+  --muted: #9fb3c8;
+  --panel: rgba(11, 20, 31, 0.76);
+  --line: rgba(255, 255, 255, 0.1);
+  --title-font: "Iowan Old Style", "Palatino Linotype", "Book Antiqua", Palatino, serif;
+  --body-font: "Avenir Next", "Segoe UI", "Helvetica Neue", sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at top, rgba(244, 201, 93, 0.1), transparent 20%),
+    linear-gradient(180deg, #04080d 0%, #081018 35%, #0b1621 100%);
+  color: var(--page-fg);
+  font-family: var(--body-font);
+}
+
+body[data-ar-mode="true"] {
+  background: #000;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.page-shell {
+  position: relative;
+  overflow: hidden;
+}
+
+.page-shell::before,
+.page-shell::after {
+  content: "";
+  position: fixed;
+  inset: auto;
+  pointer-events: none;
+  z-index: -1;
+  border-radius: 999px;
+  filter: blur(90px);
+  opacity: 0.32;
+}
+
+.page-shell::before {
+  top: -6rem;
+  right: -8rem;
+  width: 20rem;
+  height: 20rem;
+  background: #f47c48;
+}
+
+.page-shell::after {
+  left: -6rem;
+  bottom: 8rem;
+  width: 18rem;
+  height: 18rem;
+  background: #49b6b1;
+}
+
+.section-title {
+  font-family: var(--title-font);
+  letter-spacing: 0.01em;
+}
+
+.glass-panel {
+  background: linear-gradient(180deg, rgba(17, 28, 41, 0.82), rgba(8, 16, 24, 0.74));
+  border: 1px solid var(--line);
+  backdrop-filter: blur(18px);
+}
+
+.grid-fade {
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.06) 1px, transparent 1px);
+  background-size: 36px 36px;
+  mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.8), transparent);
+}

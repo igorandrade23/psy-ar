@@ -1,0 +1,6 @@
+<svg width="1080" height="1080" viewBox="0 0 1080 1080" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1080" height="1080" fill="white"/>
+  <rect x="90" y="90" width="900" height="900" rx="28" stroke="black" stroke-width="20"/>
+  <rect x="240" y="240" width="600" height="600" fill="white"/>
+  <image href="https://raw.githubusercontent.com/AR-js-org/AR.js/master/data/images/hiro.png" x="240" y="240" width="600" height="600" preserveAspectRatio="xMidYMid meet"/>
+</svg>
