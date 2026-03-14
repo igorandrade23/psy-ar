@@ -13,9 +13,87 @@ type ArSceneProps = {
 export function ArScene({ entry, onError }: ArSceneProps) {
   const [isAFrameReady, setIsAFrameReady] = useState(false);
   const [isArJsReady, setIsArJsReady] = useState(false);
+  const [isCameraReady, setIsCameraReady] = useState(false);
+  const [cameraFacingMode, setCameraFacingMode] = useState<"environment" | "user">(
+    "environment"
+  );
   const sceneRootRef = useRef<HTMLDivElement | null>(null);
 
-  const isSceneReady = isAFrameReady && isArJsReady;
+  const isSceneReady = isAFrameReady && isArJsReady && isCameraReady;
+
+  useEffect(() => {
+    let isCancelled = false;
+
+    async function prepareCamera() {
+      const isSecureHost =
+        window.location.hostname === "localhost" ||
+        window.location.hostname === "127.0.0.1" ||
+        window.location.protocol === "https:";
+
+      if (!window.isSecureContext && !isSecureHost) {
+        onError("The camera requires HTTPS or localhost.");
+        return;
+      }
+
+      if (!navigator.mediaDevices?.getUserMedia) {
+        onError("This browser does not support camera access for AR.");
+        return;
+      }
+
+      const attempts: Array<{
+        constraints: MediaStreamConstraints;
+        facingMode: "environment" | "user";
+      }> = [
+        {
+          constraints: {
+            video: {
+              facingMode: { ideal: "environment" }
+            },
+            audio: false
+          },
+          facingMode: "environment"
+        },
+        {
+          constraints: {
+            video: true,
+            audio: false
+          },
+          facingMode: "user"
+        }
+      ];
+
+      for (const attempt of attempts) {
+        try {
+          const stream = await navigator.mediaDevices.getUserMedia(attempt.constraints);
+          stream.getTracks().forEach((track) => track.stop());
+
+          if (isCancelled) {
+            return;
+          }
+
+          setCameraFacingMode(attempt.facingMode);
+          setIsCameraReady(true);
+          onError(null);
+          return;
+        } catch (error) {
+          if (attempt === attempts[attempts.length - 1] && !isCancelled) {
+            const message =
+              error instanceof DOMException
+                ? `${error.name}: ${error.message}`
+                : "Unable to access a camera on this device.";
+
+            onError(message);
+          }
+        }
+      }
+    }
+
+    prepareCamera();
+
+    return () => {
+      isCancelled = true;
+    };
+  }, [onError]);
 
   useEffect(() => {
     const isSecureHost =
@@ -24,12 +102,9 @@ export function ArScene({ entry, onError }: ArSceneProps) {
       window.location.protocol === "https:";
 
     if (!window.isSecureContext && !isSecureHost) {
-      onError("The camera requires HTTPS or localhost.");
       return;
     }
-
-    onError(null);
-  }, [onError]);
+  }, []);
 
   useEffect(() => {
     if (!isSceneReady || !sceneRootRef.current) {
@@ -83,7 +158,7 @@ export function ArScene({ entry, onError }: ArSceneProps) {
             embedded
             vr-mode-ui="enabled: false"
             device-orientation-permission-ui="enabled: false"
-            arjs="sourceType: webcam; videoTexture: true; debugUIEnabled: false;"
+            arjs={`sourceType: webcam; facingMode: ${cameraFacingMode}; videoTexture: true; debugUIEnabled: false;`}
             renderer="alpha: true; antialias: true;"
           >
             <a-assets timeout="15000">

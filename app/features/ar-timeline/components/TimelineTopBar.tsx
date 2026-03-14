@@ -26,11 +26,10 @@ export function TimelineTopBar({ activeEntry }: TimelineTopBarProps) {
         </div>
 
         <a
-          href="/markers/hiro-marker.png"
-          download
+          href="/marker"
           className="pointer-events-auto shrink-0 rounded-full border border-white/10 bg-white/10 px-3 py-2 text-xs font-medium text-white shadow-[0_12px_30px_rgba(0,0,0,0.22)] ring-1 ring-white/10 backdrop-blur-xl transition hover:bg-white/15 sm:px-4 sm:text-sm"
         >
-          Download Hiro
+          Open Marker
         </a>
       </div>
     </div>
