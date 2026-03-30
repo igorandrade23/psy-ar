@@ -1,5 +1,5 @@
-import { TimelineArExperience } from "@/app/features/ar-timeline/components/TimelineArExperience";
+import { SimpleArDemoPage } from "@/app/features/ar-demo/components/SimpleArDemoPage";
 
 export default function Page() {
-  return <TimelineArExperience />;
+  return <SimpleArDemoPage />;
 }

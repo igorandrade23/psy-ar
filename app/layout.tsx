@@ -2,9 +2,8 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Psy AR Timeline",
-  description:
-    "Linha do tempo interativa em AR sobre a passagem do estruturalismo ao behaviorismo."
+  title: "Psy AR Demo",
+  description: "Demo simples em AR com uma imagem fixa sobre o marcador Hiro."
 };
 
 export default function RootLayout({

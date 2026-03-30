@@ -35,6 +35,51 @@ body[data-ar-mode="true"] {
   background: #000;
 }
 
+body[data-ar-mode="true"] .ar-scene {
+  position: absolute !important;
+  inset: 0;
+  width: 100% !important;
+  height: 100% !important;
+  background: transparent !important;
+}
+
+.ar-demo-scene {
+  position: absolute !important;
+  inset: 0;
+  width: 100% !important;
+  height: 100% !important;
+  background: transparent !important;
+}
+
+.ar-demo-scene video,
+.ar-demo-scene canvas,
+.ar-demo-scene .a-canvas,
+.ar-demo-scene .arjs-video {
+  position: absolute !important;
+  inset: 0;
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  background: transparent !important;
+}
+
+body[data-ar-mode="true"] .ar-scene video,
+body[data-ar-mode="true"] .ar-scene canvas,
+body[data-ar-mode="true"] .arjs-video,
+body[data-ar-mode="true"] .a-canvas,
+body[data-ar-mode="true"] .a-canvas-overlay {
+  position: absolute !important;
+  inset: 0;
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  background: transparent !important;
+}
+
+body[data-ar-mode="true"] .arjs-loader {
+  display: none !important;
+}
+
 a {
   color: inherit;
   text-decoration: none;

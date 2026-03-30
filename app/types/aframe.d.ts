@@ -9,6 +9,7 @@ declare module "react" {
       "a-assets": AFrameElement;
       "a-marker": AFrameElement;
       "a-entity": AFrameElement;
+      "a-image": AFrameElement;
       "a-plane": AFrameElement;
       "a-text": AFrameElement;
       "a-ring": AFrameElement;
@@ -24,6 +25,7 @@ declare global {
       "a-assets": AFrameElement;
       "a-marker": AFrameElement;
       "a-entity": AFrameElement;
+      "a-image": AFrameElement;
       "a-plane": AFrameElement;
       "a-text": AFrameElement;
       "a-ring": AFrameElement;
