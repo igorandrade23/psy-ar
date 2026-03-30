@@ -1,16 +1,43 @@
+const markerUrl = "/markers/hiro-marker.png";
+
 export default function MarkerPage() {
   return (
-    <main className="flex min-h-screen items-center justify-center bg-white p-6">
-      <div className="flex max-w-3xl flex-col items-center gap-6">
+    <main
+      style={{
+        minHeight: "100vh",
+        display: "grid",
+        placeItems: "center",
+        padding: "24px",
+        background: "#f5f1e7",
+        color: "#1c1710"
+      }}
+    >
+      <div
+        style={{
+          width: "min(100%, 520px)",
+          display: "grid",
+          gap: "18px",
+          textAlign: "center"
+        }}
+      >
+        <div>
+          <h1 style={{ margin: "0 0 10px", fontSize: "1.8rem" }}>Marcador Hiro</h1>
+          <p style={{ margin: 0, lineHeight: 1.5 }}>
+            Abra esta tela em outra tela ou imprima a imagem abaixo para testar a experiencia em
+            AR.
+          </p>
+        </div>
+
         <img
-          src="/markers/hiro-marker.png"
-          alt="Official Hiro marker"
-          className="w-full max-w-2xl rounded-2xl border border-black/10 shadow-[0_24px_60px_rgba(0,0,0,0.12)]"
+          src={markerUrl}
+          alt="Marcador Hiro"
+          style={{
+            width: "100%",
+            height: "auto",
+            borderRadius: "20px",
+            boxShadow: "0 22px 44px rgba(0, 0, 0, 0.18)"
+          }}
         />
-        <p className="max-w-xl text-center text-sm leading-6 text-slate-700">
-          Use este marcador em outra tela ou impresso, sem cortar as bordas. O rastreamento
-          da experiencia AR atual usa o preset Hiro do AR.js.
-        </p>
       </div>
     </main>
   );

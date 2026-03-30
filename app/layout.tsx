@@ -2,15 +2,15 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Psy AR Demo",
-  description: "Demo simples em AR com uma imagem fixa sobre o marcador Hiro."
+  title: "AR",
+  description: "Experiencia em realidade aumentada com AR.js e A-Frame."
 };
 
-export default function RootLayout({
-  children
-}: Readonly<{
+type RootLayoutProps = {
   children: React.ReactNode;
-}>) {
+};
+
+export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <html lang="pt-BR">
       <body>{children}</body>
