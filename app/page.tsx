@@ -45,7 +45,7 @@ const slides: Slide[] = [
     file: "/models/pandeiro_brasileiro.glb",
     position: "0 0 0",
     rotation: "0 0 0",
-    scale: "1 1 1",
+    scale: "3 3 3",
     modelOffset: "-14 0 -0.1"
   },
   {
@@ -279,28 +279,31 @@ export default function HomePage() {
               cursor="fuse: false; rayOrigin: mouse;"
             >
               {currentSlide.kind === "image" ? (
-                <a-image
-                  key={currentSlide.assetId}
+                <a-entity
                   class="clickable"
                   gesture-handler="minScale: 0.6; maxScale: 3"
-                  position="0 0.85 0"
-                  rotation="0 0 0"
-                  look-at="[camera]"
-                  src={`#${currentSlide.assetId}`}
-                  width="1.55"
-                  height="1.05"
-                  material="shader: flat; transparent: true; side: double;"
-                />
+                >
+                  <a-image
+                    key={currentSlide.assetId}
+                    position="0 0.85 0"
+                    rotation="0 0 0"
+                    look-at="[camera]"
+                    src={`#${currentSlide.assetId}`}
+                    width="1.55"
+                    height="1.05"
+                    material="shader: flat; transparent: true; side: double;"
+                  />
+                </a-entity>
               ) : (
                 <a-entity
-                  key={currentSlide.assetId}
                   class="clickable"
-                  gesture-handler="minScale: 0.3; maxScale: 6"
+                  gesture-handler="minScale: 0.3; maxScale: 4"
                   position={currentSlide.position}
                   rotation={currentSlide.rotation}
                   scale={currentSlide.scale}
                 >
                   <a-entity
+                    key={currentSlide.assetId}
                     position={currentSlide.modelOffset}
                     gltf-model={currentSlide.file}
                   />
