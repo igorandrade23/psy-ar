@@ -19,6 +19,7 @@ type Slide = {
       position: string;
       rotation: string;
       scale: string;
+      modelOffset: string;
     }
 );
 
@@ -31,8 +32,9 @@ const slides: Slide[] = [
       "O berimbau orienta o ritmo da roda e ajuda a definir a energia do jogo na capoeira.",
     file: "/models/berimbau.glb",
     position: "0 0 0",
-    rotation: "0 90 0",
-    scale: "1 1 1"
+    rotation: "0 0 0",
+    scale: "1 1 1",
+    modelOffset: "0 0 0"
   },
   {
     kind: "model",
@@ -43,7 +45,8 @@ const slides: Slide[] = [
     file: "/models/pandeiro_brasileiro.glb",
     position: "0 0 0",
     rotation: "0 0 0",
-    scale: "1 1 1"
+    scale: "1 1 1",
+    modelOffset: "-14 0 -0.1"
   },
   {
     kind: "image",
@@ -99,8 +102,10 @@ export default function HomePage() {
   const [markerVisible, setMarkerVisible] = useState(false);
   const [scriptsLoaded, setScriptsLoaded] = useState(0);
   const [needsSecureContext, setNeedsSecureContext] = useState(false);
+  const [assetsReady, setAssetsReady] = useState(false);
 
   const currentSlide = useMemo(() => slides[slideIndex], [slideIndex]);
+  const isExperienceReady = scriptsLoaded >= 2 && assetsReady;
 
   useEffect(() => {
     const hostname = window.location.hostname;
@@ -111,179 +116,37 @@ export default function HomePage() {
   }, []);
 
   useEffect(() => {
-    if (scriptsLoaded < 2) {
-      return;
-    }
+    let active = true;
 
-    const aframeWindow = window as any;
-    const { AFRAME, THREE } = aframeWindow;
-
-    if (!AFRAME || !THREE) {
-      return;
-    }
-
-    if (!AFRAME.components?.["fit-model"]) {
-      AFRAME.registerComponent("fit-model", {
-        schema: {
-          size: { default: 1.1 }
-        },
-        init(this: any) {
-          this.handleModelLoaded = () => {
-            const mesh = this.el.getObject3D("mesh");
-
-            if (!mesh) {
-              return;
-            }
-
-            const box = new THREE.Box3().setFromObject(mesh);
-            const size = box.getSize(new THREE.Vector3());
-            const maxDimension = Math.max(size.x, size.y, size.z);
-
-            if (!maxDimension) {
-              return;
-            }
-
-            const scaleFactor = this.data.size / maxDimension;
-            mesh.scale.setScalar(scaleFactor);
-
-            const fittedBox = new THREE.Box3().setFromObject(mesh);
-            const center = fittedBox.getCenter(new THREE.Vector3());
-
-            mesh.position.x -= center.x;
-            mesh.position.y -= center.y;
-            mesh.position.z -= center.z;
-          };
-
-          this.el.addEventListener("model-loaded", this.handleModelLoaded);
-        },
-        remove(this: any) {
-          this.el.removeEventListener("model-loaded", this.handleModelLoaded);
+    const preloadAssets = async () => {
+      const tasks = slides.map((slide) => {
+        if (slide.kind === "image") {
+          return new Promise<void>((resolve) => {
+            const image = new window.Image();
+            image.onload = () => resolve();
+            image.onerror = () => resolve();
+            image.src = slide.image;
+          });
         }
+
+        return fetch(slide.file, { method: "HEAD" })
+          .then(() => undefined)
+          .catch(() => undefined);
       });
-    }
 
-    if (!AFRAME.components?.["drag-rotate-model"]) {
-      AFRAME.registerComponent("drag-rotate-model", {
-        schema: {
-          speed: { default: 0.35 }
-        },
-        init(this: any) {
-          this.isDragging = false;
-          this.pointerId = null;
-          this.lastX = 0;
-          this.lastY = 0;
+      await Promise.all(tasks);
 
-          const startDrag = (clientX: number, clientY: number, pointerId?: number) => {
-            this.isDragging = true;
-            this.pointerId = pointerId ?? null;
-            this.lastX = clientX;
-            this.lastY = clientY;
-          };
+      if (active) {
+        setAssetsReady(true);
+      }
+    };
 
-          this.onPointerDown = (event: PointerEvent) => {
-            startDrag(event.clientX, event.clientY, event.pointerId);
-          };
+    void preloadAssets();
 
-          this.onPointerMove = (event: PointerEvent) => {
-            if (!this.isDragging || (this.pointerId !== null && event.pointerId !== this.pointerId)) {
-              return;
-            }
-
-            const deltaX = event.clientX - this.lastX;
-            const deltaY = event.clientY - this.lastY;
-
-            this.lastX = event.clientX;
-            this.lastY = event.clientY;
-
-            this.el.object3D.rotation.y += deltaX * 0.01 * this.data.speed;
-          };
-
-          this.onPointerUp = (event: PointerEvent) => {
-            if (this.pointerId !== null && event.pointerId !== this.pointerId) {
-              return;
-            }
-
-            this.isDragging = false;
-            this.pointerId = null;
-          };
-
-          this.onTouchStart = (event: TouchEvent) => {
-            const touch = event.touches[0];
-            if (!touch) {
-              return;
-            }
-
-            startDrag(touch.clientX, touch.clientY);
-          };
-
-          this.onTouchMove = (event: TouchEvent) => {
-            if (!this.isDragging) {
-              return;
-            }
-
-            const touch = event.touches[0];
-            if (!touch) {
-              return;
-            }
-
-            const deltaX = touch.clientX - this.lastX;
-            const deltaY = touch.clientY - this.lastY;
-
-            this.lastX = touch.clientX;
-            this.lastY = touch.clientY;
-
-            this.el.object3D.rotation.y += deltaX * 0.01 * this.data.speed;
-          };
-
-          this.canvas = this.el.sceneEl?.canvas;
-
-          if (!this.canvas) {
-            this.onSceneLoaded = () => {
-              this.canvas = this.el.sceneEl?.canvas;
-
-              if (!this.canvas) {
-                return;
-              }
-
-              this.canvas.style.touchAction = "none";
-              this.canvas.addEventListener("pointerdown", this.onPointerDown);
-              this.canvas.addEventListener("pointermove", this.onPointerMove);
-              this.canvas.addEventListener("pointerup", this.onPointerUp);
-              this.canvas.addEventListener("pointercancel", this.onPointerUp);
-              this.canvas.addEventListener("touchstart", this.onTouchStart, { passive: true });
-              this.canvas.addEventListener("touchmove", this.onTouchMove, { passive: true });
-              this.canvas.addEventListener("touchend", this.onPointerUp);
-            };
-
-            this.el.sceneEl?.addEventListener("renderstart", this.onSceneLoaded, { once: true });
-            return;
-          }
-
-          this.canvas.style.touchAction = "none";
-          this.canvas.addEventListener("pointerdown", this.onPointerDown);
-          this.canvas.addEventListener("pointermove", this.onPointerMove);
-          this.canvas.addEventListener("pointerup", this.onPointerUp);
-          this.canvas.addEventListener("pointercancel", this.onPointerUp);
-          this.canvas.addEventListener("touchstart", this.onTouchStart, { passive: true });
-          this.canvas.addEventListener("touchmove", this.onTouchMove, { passive: true });
-          this.canvas.addEventListener("touchend", this.onPointerUp);
-        },
-        remove(this: any) {
-          if (!this.canvas) {
-            return;
-          }
-
-          this.canvas.removeEventListener("pointerdown", this.onPointerDown);
-          this.canvas.removeEventListener("pointermove", this.onPointerMove);
-          this.canvas.removeEventListener("pointerup", this.onPointerUp);
-          this.canvas.removeEventListener("pointercancel", this.onPointerUp);
-          this.canvas.removeEventListener("touchstart", this.onTouchStart);
-          this.canvas.removeEventListener("touchmove", this.onTouchMove);
-          this.canvas.removeEventListener("touchend", this.onPointerUp);
-        }
-      });
-    }
-  }, [scriptsLoaded]);
+    return () => {
+      active = false;
+    };
+  }, []);
 
   useEffect(() => {
     const hideOverlays = () => {
@@ -376,6 +239,10 @@ export default function HomePage() {
         onLoad={() => setScriptsLoaded((current) => current + 1)}
       />
       <Script
+        src="https://raw.githack.com/fcor/arjs-gestures/master/dist/gestures.js"
+        strategy="afterInteractive"
+      />
+      <Script
         src="https://unpkg.com/aframe-look-at-component@1.0.0/dist/aframe-look-at-component.min.js"
         strategy="afterInteractive"
       />
@@ -387,27 +254,35 @@ export default function HomePage() {
         </div>
       ) : null}
 
-      {scriptsLoaded >= 2 ? (
+      {isExperienceReady ? (
         <div className={styles.sceneWrap}>
           <a-scene
+            id="scene"
             embedded
             vr-mode-ui="enabled: false"
             renderer="alpha: true; antialias: true; precision: medium;"
             arjs="trackingMethod: best; sourceType: webcam; facingMode: environment; debugUIEnabled: false;"
+            gesture-detector
           >
             <a-assets timeout="20000">
               {slides.map((slide) =>
                 slide.kind === "image" ? (
                   <img key={slide.assetId} id={slide.assetId} src={slide.image} alt={slide.title} />
-                ) : (
-                  <a-asset-item key={slide.assetId} id={slide.assetId} src={slide.file} />
-                )
+                ) : null
               )}
             </a-assets>
-            <a-marker id="hiro-marker" preset="hiro">
+            <a-marker
+              id="hiro-marker"
+              preset="hiro"
+              raycaster="objects: .clickable"
+              emitevents="true"
+              cursor="fuse: false; rayOrigin: mouse;"
+            >
               {currentSlide.kind === "image" ? (
                 <a-image
                   key={currentSlide.assetId}
+                  class="clickable"
+                  gesture-handler="minScale: 0.6; maxScale: 3"
                   position="0 0.85 0"
                   rotation="0 0 0"
                   look-at="[camera]"
@@ -419,29 +294,37 @@ export default function HomePage() {
               ) : (
                 <a-entity
                   key={currentSlide.assetId}
+                  class="clickable"
+                  gesture-handler="minScale: 0.3; maxScale: 6"
                   position={currentSlide.position}
+                  rotation={currentSlide.rotation}
+                  scale={currentSlide.scale}
                 >
-                  <a-entity rotation={currentSlide.rotation} drag-rotate-model>
-                    <a-entity
-                      gltf-model={`#${currentSlide.assetId}`}
-                      fit-model="size: 1.05"
-                      scale={currentSlide.scale}
-                    />
-                  </a-entity>
+                  <a-entity
+                    position={currentSlide.modelOffset}
+                    gltf-model={currentSlide.file}
+                  />
                 </a-entity>
               )}
             </a-marker>
             <a-entity camera />
           </a-scene>
         </div>
-      ) : (
-        <div className={styles.fallback}>
-          <div className={styles.fallbackCard}>
-            <h1>Abrindo a experiencia AR</h1>
-            <p>Permita o uso da camera e aponte para o marcador Hiro para exibir o conteudo.</p>
+      ) : null}
+
+      {!isExperienceReady ? (
+        <div className={styles.loadingScreen} aria-live="polite">
+          <div className={styles.loadingCard}>
+            <div className={styles.loadingOrb} />
+            <span className={styles.loadingTag}>Preparando a experiencia</span>
+            <h1>Carregando elementos da matriz Africana no Brasil</h1>
+            <p>
+              Organizando camera, modelos 3D, imagens e conteudos para iniciar a experiencia em
+              realidade aumentada.
+            </p>
           </div>
         </div>
-      )}
+      ) : null}
 
       <div className={styles.status}>
         {markerVisible ? "Marcador Hiro detectado" : "Aponte a camera para o Hiro"}
