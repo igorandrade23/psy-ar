@@ -8,6 +8,8 @@ type Slide = {
   assetId: string;
   title: string;
   description: string;
+  details: string;
+  references: string[];
 } & (
   | {
       kind: "image";
@@ -16,7 +18,7 @@ type Slide = {
   | {
       kind: "model";
       file: string;
-      audio: string;
+      audio?: string;
       position: string;
       rotation: string;
       scale: string;
@@ -26,77 +28,142 @@ type Slide = {
 
 const slides: Slide[] = [
   {
+    kind: "image",
+    assetId: "slide-origens",
+    title: "Origens da capoeira",
+    description:
+      "Registros do século XIX mostram que a capoeira já circulava em cidades brasileiras como prática corporal, luta, jogo e forma de sociabilidade entre populações negras.",
+    details:
+      "A pintura atribuída a Augustus Earle costuma ser utilizada em estudos históricos como um dos registros visuais mais conhecidos de uma prática semelhante à capoeira no Brasil oitocentista. Ao apresentar corpo, confronto, ritmo e observação coletiva, a imagem ajuda a compreender a capoeira como manifestação social e não apenas como técnica de combate.",
+    references: [
+      "EARLE, Augustus. Negroes fighting, Brazil, c. 1824.",
+      "RIBEIRO, Darcy. O povo brasileiro.",
+      "SCHWARCZ, Lilia Moritz; STARLING, Heloisa Murgel. Brasil: uma biografia."
+    ],
+    image: "/images/capoeira-earle.jpg"
+  },
+  {
+    kind: "image",
+    assetId: "slide-resistencia",
+    title: "Repressão e resistência",
+    description:
+      "Ao longo de sua história, a capoeira foi alvo de perseguição e estigma, mas permaneceu viva por meio da transmissão entre mestres, rodas e comunidades.",
+    details:
+      "A criminalização da capoeira em diferentes momentos da história brasileira não impediu sua continuidade. A prática persistiu porque esteve vinculada a redes de pertencimento, memória e formação coletiva. Por isso, estudar capoeira exige observá-la como experiência histórica de resistência cultural e reinvenção social.",
+    references: [
+      "SODRÉ, Muniz. O terreiro e a cidade.",
+      "RIBEIRO, Darcy. O povo brasileiro.",
+      "SCHWARCZ, Lilia Moritz; STARLING, Heloisa Murgel. Brasil: uma biografia."
+    ],
+    image: "/images/roda-capoeira-angola.jpg"
+  },
+  {
+    kind: "image",
+    assetId: "slide-patrimonio",
+    title: "Capoeira como patrimônio vivo",
+    description:
+      "Hoje, a capoeira é reconhecida como patrimônio cultural e segue ativa em escolas, projetos, academias, grupos comunitários e rodas públicas.",
+    details:
+      "Esse reconhecimento institucional não encerra a história da capoeira; ao contrário, reforça sua permanência como prática viva, transmitida pela experiência do corpo, da música, da oralidade e do convívio. A roda continua sendo espaço de aprendizagem, disciplina, improviso e elaboração de identidade coletiva.",
+    references: [
+      "IPHAN. Roda de Capoeira e Ofício dos Mestres de Capoeira.",
+      "SODRÉ, Muniz. O terreiro e a cidade.",
+      "RIBEIRO, Darcy. O povo brasileiro."
+    ],
+    image: "/images/patrimonio-imaterial-capoeira.jpg"
+  },
+  {
     kind: "model",
-    assetId: "slide-berimbau",
+    assetId: "slide-ginga",
+    title: "A ginga",
+    description:
+      "A ginga é o movimento-base da capoeira. Ela organiza o equilíbrio, a defesa, a leitura do jogo e a relação entre ataque e esquiva.",
+    details:
+      "Mais do que um passo repetido, a ginga produz ritmo, intenção e disponibilidade corporal. Ela ensina o praticante a nunca permanecer estático, a negociar distância e tempo, e a transformar o corpo em linguagem. Por isso, a ginga é frequentemente apresentada como síntese técnica e simbólica da capoeira contemporânea.",
+    references: [
+      "SODRÉ, Muniz. O terreiro e a cidade.",
+      "RIBEIRO, Darcy. O povo brasileiro."
+    ],
+    file: "/models/ginga.glb",
+    position: "0 0 0",
+    rotation: "0 180 0",
+    scale: "1.2 1.2 1.2",
+    modelOffset: "0 -0.89 -0.03"
+  },
+  {
+    kind: "model",
+    assetId: "slide-berimbau2",
     title: "Berimbau",
     description:
-      "O berimbau orienta o ritmo da roda e ajuda a definir a energia do jogo na capoeira.",
-    file: "/models/berimbau.glb",
+      "O berimbau orienta a roda e ajuda a definir o tipo de jogo, o andamento do toque e a atenção dos participantes.",
+    details:
+      "Na roda de capoeira, o berimbau ocupa lugar central porque estrutura o ritmo e sinaliza modos distintos de jogar. Seu som não funciona apenas como acompanhamento: ele organiza a dinâmica da roda, orienta entradas e reforça a relação entre música, disciplina e improviso.",
+    references: [
+      "SODRÉ, Muniz. O terreiro e a cidade.",
+      "RIBEIRO, Darcy. O povo brasileiro.",
+      "Arquivo sonoro: Toque-de-angola.ogg, Wikimedia Commons."
+    ],
+    file: "/models/berimbau2.glb",
     audio: "/audio/berimbau.ogg",
     position: "0 0 0",
-    rotation: "0 0 0",
-    scale: "1 1 1",
-    modelOffset: "-0.6 -0.86 0"
+    rotation: "0 90 0",
+    scale: "0.015 0.015 0.015",
+    modelOffset: "-16.85 -76.83 2.19"
   },
   {
     kind: "model",
     assetId: "slide-pandeiro",
     title: "Pandeiro Brasileiro",
     description:
-      "O pandeiro conecta a capoeira a um campo mais amplo de musicalidades afro-brasileiras.",
+      "O pandeiro complementa a roda com marcação rítmica, balanço e resposta ao toque principal do berimbau.",
+    details:
+      "Na capoeira, o pandeiro reforça a pulsação da roda e contribui para a densidade sonora do conjunto. Seu uso aproxima a capoeira de outros campos da música popular brasileira e evidencia que a roda articula corpo, canto, percussão e escuta coletiva.",
+    references: [
+      "SODRÉ, Muniz. O terreiro e a cidade.",
+      "RIBEIRO, Darcy. O povo brasileiro.",
+      "Arquivo sonoro: preview de pandeiro, Freesound."
+    ],
     file: "/models/pandeiro_brasileiro.glb",
     audio: "/audio/pandeiro.mp3",
     position: "0 0 0",
-    rotation: "0 0 0",
+    rotation: "0 180 0",
     scale: "3 3 3",
     modelOffset: "-14 -0.1 0"
   },
   {
-    kind: "image",
-    assetId: "slide-equipe",
-    title: "Nossa equipe",
-    description: "Foto principal da equipe",
-    image: "/images/equipe.png"
+    kind: "model",
+    assetId: "slide-atabaque",
+    title: "Atabaque",
+    description:
+      "O atabaque amplia a base percussiva da roda e ajuda a sustentar a energia coletiva da música e do canto.",
+    details:
+      "Embora o berimbau costume ocupar o centro simbólico da roda, o atabaque contribui para a sustentação do ritmo e reforça a presença de matrizes percussivas afro-brasileiras. Seu timbre grave ajuda a construir ambiência, intensidade e coesão entre movimento corporal e acompanhamento musical.",
+    references: [
+      "SODRÉ, Muniz. O terreiro e a cidade.",
+      "RIBEIRO, Darcy. O povo brasileiro.",
+      "Arquivo sonoro: stevysound_ethnic_percussion_120bpm_152606.wav, Freesound."
+    ],
+    file: "/models/atabaque.glb",
+    audio: "/audio/atabaque.mp3",
+    position: "0 0 0",
+    rotation: "0 180 0",
+    scale: "1.2 1.2 1.2",
+    modelOffset: "-0.35 -0.59 0.07"
   },
   {
     kind: "image",
-    assetId: "slide-casa-branca",
-    title: "Casa Branca do Engenho Velho",
+    assetId: "slide-musicos",
+    title: "A roda e a música hoje",
     description:
-      "Um dos terreiros de candomble mais antigos em atividade no Brasil, ligado a consolidacao urbana dos cultos afro-brasileiros no seculo XIX em Salvador.",
-    image: "/images/casa-branca-engenho-velho.jpg"
-  },
-  {
-    kind: "image",
-    assetId: "slide-jaua",
-    title: "Terreiro de Jaua",
-    description:
-      "Os terreiros se tornaram espacos de resistencia cultural, onde rituais, memorias e formas de organizacao comunitaria foram preservados apesar da repressao historica.",
-    image: "/images/terreiro-do-jaua.jpg"
-  },
-  {
-    kind: "image",
-    assetId: "slide-afonja",
-    title: "Ile Opo Afonja",
-    description:
-      "Tradicoes de matriz ioruba e jeje ganharam forte presenca na Bahia, ajudando a estruturar casas religiosas que se tornaram referencias simbolicas e politicas.",
-    image: "/images/ile-opo-afonja.jpg"
-  },
-  {
-    kind: "image",
-    assetId: "slide-atabaques",
-    title: "Atabaques e batuque",
-    description:
-      "Os toques de tambor, os cantos responsoriais e a danca sao centrais nessas religioes e influenciaram profundamente a musica e a cultura popular brasileira.",
-    image: "/images/atabaques-batuque.jpg"
-  },
-  {
-    kind: "image",
-    assetId: "slide-exu",
-    title: "Representacao de Exu",
-    description:
-      "As religioes afro-brasileiras organizaram seus cultos em torno de orixas, voduns e inkices, preservando cosmologias africanas mesmo em dialogo com o catolicismo e outros sistemas.",
-    image: "/images/exu.jpg"
+      "A roda contemporânea articula jogo, música, canto, memória e convivência, mantendo a capoeira como prática coletiva e elemento cultural vivo.",
+    details:
+      "Em contextos contemporâneos, a roda preserva dimensões históricas da capoeira ao mesmo tempo que dialoga com escola, turismo, políticas de patrimônio e formação artística. A presença de músicos e praticantes no mesmo espaço mostra que a capoeira continua sendo, ao mesmo tempo, arte, pedagogia, performance e experiência comunitária.",
+    references: [
+      "IPHAN. Roda de Capoeira e Ofício dos Mestres de Capoeira.",
+      "SODRÉ, Muniz. O terreiro e a cidade.",
+      "SCHWARCZ, Lilia Moritz; STARLING, Heloisa Murgel. Brasil: uma biografia."
+    ],
+    image: "/images/musicos-capoeira-angola.jpg"
   }
 ];
 
@@ -105,6 +172,7 @@ type CameraState = "checking" | "ready" | "blocked" | "unavailable" | "unsupport
 export default function HomePage() {
   const [slideIndex, setSlideIndex] = useState(0);
   const [markerVisible, setMarkerVisible] = useState(false);
+  const [markerSeen, setMarkerSeen] = useState(false);
   const [coreScriptsLoaded, setCoreScriptsLoaded] = useState(0);
   const [pluginsReady, setPluginsReady] = useState(0);
   const [needsSecureContext, setNeedsSecureContext] = useState(false);
@@ -182,6 +250,12 @@ export default function HomePage() {
   }, [slideIndex, markerVisible]);
 
   useEffect(() => {
+    if (markerVisible) {
+      setMarkerSeen(true);
+    }
+  }, [markerVisible]);
+
+  useEffect(() => {
     if (audioRef.current) {
       audioRef.current.pause();
       audioRef.current.currentTime = 0;
@@ -211,6 +285,70 @@ export default function HomePage() {
       window.clearInterval(timer);
     };
   }, []);
+
+  useEffect(() => {
+    if (!isExperienceReady) {
+      return;
+    }
+
+    const aframe = (window as Window & { AFRAME?: { components: Record<string, unknown>; registerComponent: (name: string, definition: object) => void } }).AFRAME;
+
+    if (!aframe || aframe.components["safe-look-at"]) {
+      return;
+    }
+
+    aframe.registerComponent("safe-look-at", {
+      schema: {
+        target: { type: "selector" }
+      },
+
+      init(this: any) {
+        this.retryId = null;
+        this.queueApply = () => {
+          if (this.retryId) {
+            window.clearTimeout(this.retryId);
+          }
+
+          this.retryId = window.setTimeout(() => {
+            const scene = this.el.sceneEl;
+            const target = this.data.target;
+
+            if (!scene?.hasLoaded || !target?.id) {
+              this.queueApply();
+              return;
+            }
+
+            this.el.setAttribute("look-at", `#${target.id}`);
+          }, 80);
+        };
+
+        this.onSceneLoaded = () => this.queueApply();
+        this.onMarkerFound = () => this.queueApply();
+
+        if (this.el.sceneEl?.hasLoaded) {
+          this.queueApply();
+        } else {
+          this.el.sceneEl?.addEventListener("loaded", this.onSceneLoaded);
+        }
+
+        this.markerEl = this.el.closest("a-marker");
+        this.markerEl?.addEventListener("markerFound", this.onMarkerFound);
+      },
+
+      update(this: any) {
+        this.queueApply?.();
+      },
+
+      remove(this: any) {
+        if (this.retryId) {
+          window.clearTimeout(this.retryId);
+        }
+
+        this.el.sceneEl?.removeEventListener("loaded", this.onSceneLoaded);
+        this.markerEl?.removeEventListener("markerFound", this.onMarkerFound);
+      }
+    });
+  }, [isExperienceReady]);
 
   useEffect(() => {
     if (!isExperienceReady) {
@@ -266,7 +404,7 @@ export default function HomePage() {
   }, [isExperienceReady]);
 
   useEffect(() => {
-    if (currentSlide.kind !== "model" || !markerVisible) {
+    if (currentSlide.kind !== "model" || !currentSlide.audio || !markerVisible) {
       return;
     }
 
@@ -278,6 +416,10 @@ export default function HomePage() {
 
     const playModelAudio = () => {
       const src = currentSlide.audio;
+
+      if (!src) {
+        return;
+      }
 
       if (audioRef.current?.src.endsWith(src)) {
         audioRef.current.currentTime = 0;
@@ -348,10 +490,6 @@ export default function HomePage() {
     kind: "scale" | "rotateX" | "rotateY",
     value: number
   ) => {
-    if ((kind === "rotateX" || kind === "rotateY") && currentSlide.kind === "image") {
-      return;
-    }
-
     const activeEntity = document.querySelector("#hiro-marker .clickable");
 
     if (!(activeEntity instanceof HTMLElement) || !("object3D" in activeEntity)) {
@@ -399,7 +537,7 @@ export default function HomePage() {
     ).object3D;
 
     if (currentSlide.kind === "image") {
-      object3D.scale.set(1, 1, 1);
+      object3D.scale.set(1.5, 1.5, 1.5);
       object3D.rotation.set(0, 0, 0);
       object3D.position.set(0, 0, 0);
       return;
@@ -418,7 +556,7 @@ export default function HomePage() {
   };
 
   const toggleModelAudio = () => {
-    if (currentSlide.kind !== "model") {
+    if (currentSlide.kind !== "model" || !currentSlide.audio) {
       return;
     }
 
@@ -463,6 +601,7 @@ export default function HomePage() {
         strategy="afterInteractive"
         onLoad={() => setPluginsReady((current) => current + 1)}
       />
+      <Script src="/vendor/aframe-extras.loaders.min.js" strategy="afterInteractive" />
 
       {needsSecureContext ? (
         <div className={styles.cameraNotice} aria-live="polite">
@@ -503,13 +642,13 @@ export default function HomePage() {
               {currentSlide.kind === "image" ? (
                 <a-entity
                   class="clickable"
-                  gesture-handler="rotationFactor: 0; minScale: 0.6; maxScale: 3"
+                  scale="1.5 1.5 1.5"
+                  safe-look-at="target: #main-camera"
                 >
                   <a-image
                     key={currentSlide.assetId}
                     position="0 0 0"
                     rotation="0 0 0"
-                    look-at="[camera]"
                     src={`#${currentSlide.assetId}`}
                     width="1.55"
                     height="1.05"
@@ -528,11 +667,12 @@ export default function HomePage() {
                     key={currentSlide.assetId}
                     position={currentSlide.modelOffset}
                     gltf-model={currentSlide.file}
+                    animation-mixer={currentSlide.assetId === "slide-ginga" ? "clip: mixamo.com; loop: repeat" : undefined}
                   />
                 </a-entity>
               )}
             </a-marker>
-            <a-entity camera />
+            <a-entity id="main-camera" camera />
           </a-scene>
         </div>
       ) : null}
@@ -600,9 +740,11 @@ export default function HomePage() {
                 : "Aponte a camera para o marcador Hiro do museu"}
       </div>
 
-      <a className={styles.markerLink} href="/marker" target="_blank" rel="noreferrer">
-        Abrir marcador Hiro
-      </a>
+      {!markerSeen ? (
+        <a className={styles.markerLink} href="/marker" target="_blank" rel="noreferrer">
+          Abrir marcador Hiro
+        </a>
+      ) : null}
 
       {markerVisible && !descriptionExpanded ? (
         <div
@@ -612,26 +754,6 @@ export default function HomePage() {
           aria-label="Controles rapidos do conteudo AR"
         >
           <div className={styles.quickActionsRow}>
-            <button
-              className={styles.quickActionButton}
-              type="button"
-              onPointerDown={resetActiveContent}
-              onContextMenu={(event) => event.preventDefault()}
-              aria-label="Resetar conteudo"
-            >
-              ↻
-            </button>
-            {currentSlide.kind === "model" ? (
-              <button
-                className={styles.quickActionButton}
-                type="button"
-                onPointerDown={toggleModelAudio}
-                onContextMenu={(event) => event.preventDefault()}
-                aria-label={isAudioPlaying ? "Pausar audio do instrumento" : "Tocar audio do instrumento"}
-              >
-                {isAudioPlaying ? "❚❚" : "▶"}
-              </button>
-            ) : null}
             <button
               className={styles.quickActionButton}
               type="button"
@@ -651,26 +773,32 @@ export default function HomePage() {
               －
             </button>
           </div>
+          <div className={styles.quickActionsRow}>
+            <button
+              className={styles.quickActionButton}
+              type="button"
+              onPointerDown={resetActiveContent}
+              onContextMenu={(event) => event.preventDefault()}
+              aria-label="Resetar conteudo"
+            >
+              ↻
+            </button>
+            {currentSlide.kind === "model" && currentSlide.audio ? (
+              <button
+                className={styles.quickActionButton}
+                type="button"
+                onPointerDown={toggleModelAudio}
+                onContextMenu={(event) => event.preventDefault()}
+                aria-label={isAudioPlaying ? "Pausar audio do instrumento" : "Tocar audio do instrumento"}
+              >
+                {isAudioPlaying ? "❚❚" : "▶"}
+              </button>
+            ) : (
+              <span className={styles.quickActionSpacer} aria-hidden="true" />
+            )}
+          </div>
           {currentSlide.kind === "model" ? (
             <div className={styles.quickActionsRow}>
-              <button
-                className={styles.quickActionButton}
-                type="button"
-                onPointerDown={() => startContinuousTransform("rotateY", Math.PI / 18)}
-                onContextMenu={(event) => event.preventDefault()}
-                aria-label="Mover para a direita"
-              >
-                →
-              </button>
-              <button
-                className={styles.quickActionButton}
-                type="button"
-                onPointerDown={() => startContinuousTransform("rotateY", -Math.PI / 18)}
-                onContextMenu={(event) => event.preventDefault()}
-                aria-label="Mover para a esquerda"
-              >
-                ←
-              </button>
               <button
                 className={styles.quickActionButton}
                 type="button"
@@ -688,6 +816,28 @@ export default function HomePage() {
                 aria-label="Mover para baixo"
               >
                 ↓
+              </button>
+            </div>
+          ) : null}
+          {currentSlide.kind === "model" ? (
+            <div className={styles.quickActionsRow}>
+              <button
+                className={styles.quickActionButton}
+                type="button"
+                onPointerDown={() => startContinuousTransform("rotateY", -Math.PI / 18)}
+                onContextMenu={(event) => event.preventDefault()}
+                aria-label="Mover para a esquerda"
+              >
+                ←
+              </button>
+              <button
+                className={styles.quickActionButton}
+                type="button"
+                onPointerDown={() => startContinuousTransform("rotateY", Math.PI / 18)}
+                onContextMenu={(event) => event.preventDefault()}
+                aria-label="Mover para a direita"
+              >
+                →
               </button>
             </div>
           ) : null}
@@ -714,9 +864,22 @@ export default function HomePage() {
             >
               {currentSlide.title}
             </h2>
-            <p className={descriptionExpanded ? styles.descriptionExpanded : styles.descriptionCollapsed}>
+            <p
+              className={descriptionExpanded ? styles.descriptionExpanded : styles.descriptionCollapsed}
+            >
               {currentSlide.description}
             </p>
+            {descriptionExpanded ? <p className={styles.details}>{currentSlide.details}</p> : null}
+            {descriptionExpanded ? (
+              <div className={styles.references}>
+                <span className={styles.referencesTitle}>Referências</span>
+                <ul className={styles.referencesList}>
+                  {currentSlide.references.map((reference) => (
+                    <li key={reference}>{reference}</li>
+                  ))}
+                </ul>
+              </div>
+            ) : null}
             <button
               className={styles.textToggle}
               type="button"
