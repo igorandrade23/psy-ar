@@ -11,6 +11,9 @@
   "dependencies": {
     "@react-three/drei": "^10.7.7",
     "@react-three/fiber": "^9.5.0",
+    "aframe": "^1.7.1",
+    "aframe-look-at-component": "^1.0.0",
+    "ar.js": "^2.2.2",
     "next": "^15.3.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",

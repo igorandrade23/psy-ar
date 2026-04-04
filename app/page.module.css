@@ -72,6 +72,48 @@
     linear-gradient(180deg, #181511 0%, #050505 100%);
 }
 
+.cameraNotice {
+  position: absolute;
+  inset: 0;
+  z-index: 24;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background:
+    radial-gradient(circle at top, rgba(223, 184, 126, 0.16), transparent 34%),
+    linear-gradient(180deg, rgba(24, 21, 17, 0.96) 0%, rgba(5, 5, 5, 0.98) 100%);
+}
+
+.cameraNoticeCard {
+  width: min(100%, 440px);
+  display: grid;
+  gap: 14px;
+  padding: 28px 24px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 26px;
+  background: rgba(10, 10, 10, 0.82);
+  backdrop-filter: blur(16px);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.36);
+  text-align: center;
+}
+
+.cameraNoticeCard h1 {
+  margin: 0;
+  font-size: 1.34rem;
+  line-height: 1.25;
+}
+
+.cameraNoticeCard p {
+  margin: 0;
+  color: rgba(243, 234, 217, 0.82);
+  line-height: 1.55;
+}
+
+.cameraActions {
+  display: flex;
+  justify-content: center;
+}
+
 .loadingCard {
   width: min(100%, 420px);
   display: grid;
@@ -149,35 +191,95 @@
   letter-spacing: 0.01em;
 }
 
-.warning {
+.markerLink {
   position: absolute;
-  top: 70px;
+  top: 64px;
   left: 18px;
-  right: 18px;
   z-index: 6;
-  padding: 12px 14px;
-  border-radius: 16px;
-  background: rgba(123, 34, 0, 0.8);
-  color: #fff3e8;
-  font-size: 0.86rem;
-  line-height: 1.4;
-  backdrop-filter: blur(10px);
+  display: inline-flex;
+  align-items: center;
+  min-height: 34px;
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: rgba(48, 31, 10, 0.62);
+  color: #f6d9a6;
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-decoration: none;
+  backdrop-filter: blur(12px);
+}
+
+.quickActions {
+  position: absolute;
+  left: 50%;
+  z-index: 11;
+  display: grid;
+  gap: 4px;
+  width: min(170px, calc(100vw - 32px));
+  transform: translateX(-50%);
+}
+
+.quickActionsImage {
+  bottom: calc(max(16px, env(safe-area-inset-bottom)) + 194px);
+}
+
+.quickActionsModel {
+  bottom: calc(max(16px, env(safe-area-inset-bottom)) + 224px);
+}
+
+.quickActionsRow {
+  display: grid;
+  gap: 4px;
+}
+
+.quickActionsImage .quickActionsRow {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.quickActionsModel .quickActionsRow:first-child {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.quickActionsModel .quickActionsRow:last-child {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.quickActionButton {
+  min-height: 20px;
+  border: 1px solid rgba(246, 217, 166, 0.22);
+  border-radius: 7px;
+  background: rgba(48, 31, 10, 0.56);
+  color: #f3ead9;
+  font-size: 0.68rem;
+  font-weight: 700;
+  line-height: 1;
+  backdrop-filter: blur(14px);
+  box-shadow: 0 18px 36px rgba(0, 0, 0, 0.22);
+  user-select: none;
+  -webkit-touch-callout: none;
+  touch-action: none;
 }
 
 .modal {
   position: absolute;
-  left: 16px;
-  right: 16px;
+  left: 50%;
   bottom: max(16px, env(safe-area-inset-bottom));
   z-index: 10;
   display: grid;
-  gap: 14px;
-  padding: 18px;
+  gap: 12px;
+  padding: 16px;
+  width: min(460px, calc(100vw - 32px));
   border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 22px;
   background: rgba(7, 7, 7, 0.78);
   backdrop-filter: blur(18px);
   box-shadow: 0 24px 60px rgba(0, 0, 0, 0.4);
+  transform: translateX(-50%);
+}
+
+.modalExpanded {
+  max-height: min(62svh, 520px);
+  overflow: auto;
 }
 
 .meta {
@@ -207,17 +309,44 @@
   letter-spacing: 0.1em;
 }
 
-.content h2 {
-  margin: 0 0 8px;
-  font-size: 1.18rem;
-  line-height: 1.2;
-}
-
 .content p {
   margin: 0;
   color: rgba(243, 234, 217, 0.82);
-  line-height: 1.45;
-  font-size: 0.96rem;
+  line-height: 1.4;
+  font-size: 0.9rem;
+}
+
+.contentTitle {
+  margin: 0 0 8px;
+  font-size: 1.02rem;
+  line-height: 1.15;
+}
+
+.contentTitleLong {
+  margin: 0 0 8px;
+  font-size: 0.92rem;
+  line-height: 1.12;
+}
+
+.descriptionCollapsed {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.descriptionExpanded {
+  display: block;
+}
+
+.textToggle {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #f6d9a6;
+  font-size: 0.84rem;
+  font-weight: 700;
+  text-align: left;
 }
 
 .controls {
@@ -256,9 +385,24 @@
 }
 
 @media (min-width: 768px) {
-  .modal {
+  .markerLink {
+    top: 66px;
     left: 24px;
-    right: 24px;
+  }
+
+  .quickActions {
+    width: min(170px, calc(100vw - 48px));
+  }
+
+  .quickActionsImage {
+    bottom: 214px;
+  }
+
+  .quickActionsModel {
+    bottom: 244px;
+  }
+
+  .modal {
     max-width: 460px;
   }
 }

@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "AR",
-  description: "Experiencia em realidade aumentada com AR.js e A-Frame."
+  title: "Museu Virtual da Capoeira",
+  description: "Experiencia em realidade aumentada do Museu Virtual da Capoeira."
 };
 
 type RootLayoutProps = {

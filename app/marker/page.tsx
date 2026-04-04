@@ -21,10 +21,12 @@ export default function MarkerPage() {
         }}
       >
         <div>
-          <h1 style={{ margin: "0 0 10px", fontSize: "1.8rem" }}>Marcador Hiro</h1>
+          <h1 style={{ margin: "0 0 10px", fontSize: "1.8rem" }}>
+            Marcador do Museu Virtual da Capoeira
+          </h1>
           <p style={{ margin: 0, lineHeight: 1.5 }}>
-            Abra esta tela em outra tela ou imprima a imagem abaixo para testar a experiencia em
-            AR.
+            Abra esta tela em outro dispositivo ou imprima a imagem abaixo para testar a
+            experiencia do museu em realidade aumentada.
           </p>
         </div>
 
