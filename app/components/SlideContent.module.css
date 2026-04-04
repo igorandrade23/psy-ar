@@ -1,0 +1,95 @@
+.content {
+  display: grid;
+  gap: 10px;
+  color: #f3ead9;
+}
+
+.title {
+  margin: 0;
+  font-size: 1.08rem;
+  line-height: 1.18;
+}
+
+.titleCompact {
+  font-size: 1rem;
+}
+
+.content p {
+  margin: 0;
+  line-height: 1.55;
+}
+
+.details {
+  color: rgba(243, 234, 217, 0.88);
+  font-size: 0.9rem;
+}
+
+.descriptionCollapsed {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.descriptionExpanded {
+  display: block;
+}
+
+.references {
+  display: grid;
+  gap: 6px;
+}
+
+.referencesTitle {
+  color: #f6d9a6;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.referencesList {
+  margin: 0;
+  padding-left: 18px;
+  color: rgba(243, 234, 217, 0.74);
+  font-size: 0.8rem;
+  line-height: 1.45;
+}
+
+.referencesList a {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 0.16em;
+}
+
+.textToggle {
+  width: fit-content;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #f6d9a6;
+  font-size: 0.84rem;
+  font-weight: 700;
+  text-align: left;
+  cursor: pointer;
+}
+
+.toneDark {
+  color: #20160d;
+}
+
+.toneDark .details {
+  color: rgba(32, 22, 13, 0.82);
+}
+
+.toneDark .referencesTitle {
+  color: #7e4513;
+}
+
+.toneDark .referencesList {
+  color: rgba(32, 22, 13, 0.68);
+}
+
+.toneDark .textToggle {
+  color: #7e4513;
+}

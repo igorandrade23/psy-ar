@@ -9,6 +9,7 @@ declare global {
         "a-asset-item": Record<string, unknown>;
         "a-marker": Record<string, unknown>;
         "a-image": Record<string, unknown>;
+        "a-video": Record<string, unknown>;
         "a-entity": Record<string, unknown>;
       }
     }
