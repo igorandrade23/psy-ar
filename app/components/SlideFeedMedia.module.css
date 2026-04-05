@@ -1,6 +1,5 @@
 .mediaFrame {
   position: relative;
-  min-height: 360px;
   overflow: hidden;
   border-radius: 24px;
   background:
@@ -19,8 +18,8 @@
 }
 
 .videoShell {
-  width: min(100%, 300px);
-  aspect-ratio: 9 / 16;
+  width: min(100%, 100%);
+  max-width: 520px;
   overflow: hidden;
   border-radius: 22px;
   background: #000;
@@ -29,7 +28,7 @@
 
 .embed {
   width: 100%;
-  min-height: 360px;
+  height: 100%;
   border: 0;
 }
 
@@ -37,7 +36,7 @@
 .video {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
 }
 
 .videoContained {

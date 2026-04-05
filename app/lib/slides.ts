@@ -12,6 +12,11 @@ export type Slide = {
   references: string[];
   mediaSources?: SlideSource[];
   siteEmbedUrl?: string;
+  embedZoomOutFactor?: number;
+  mediaWidth?: number;
+  mediaHeight?: number;
+  arMediaWidth?: number;
+  arMediaHeight?: number;
 } & (
   | {
       kind: "image";
@@ -47,6 +52,10 @@ export const slides: Slide[] = [
         url: "https://commons.wikimedia.org/wiki/File:CapoeiraEarle.JPG"
       }
     ],
+    mediaWidth: 1200,
+    mediaHeight: 796,
+    arMediaWidth: 1200,
+    arMediaHeight: 796,
     image: "/images/capoeira-earle.jpg"
   },
   {
@@ -64,6 +73,10 @@ export const slides: Slide[] = [
         url: "https://commons.wikimedia.org/wiki/File:Capoeira_in_Salvador_Brazil.jpg"
       }
     ],
+    mediaWidth: 1188,
+    mediaHeight: 781,
+    arMediaWidth: 1188,
+    arMediaHeight: 781,
     image: "/images/roda-capoeira-angola.jpg"
   },
   {
@@ -81,6 +94,10 @@ export const slides: Slide[] = [
         url: "https://commons.wikimedia.org/wiki/File:Patrim%C3%B4nio_Imaterial_Capoeira_(49188931842).jpg"
       }
     ],
+    mediaWidth: 2048,
+    mediaHeight: 1365,
+    arMediaWidth: 2048,
+    arMediaHeight: 1365,
     image: "/images/patrimonio-imaterial-capoeira.jpg"
   },
   {
@@ -99,16 +116,19 @@ export const slides: Slide[] = [
         contexts: ["site"]
       },
       {
-        label:
-          "Vídeo na experiência AR: Lucas Teles, \"Capoeiristas no Terreiro de Jesus 3\" (Wikimedia Commons, fonte original Vimeo, CC BY-SA 3.0)",
-        url: "https://commons.wikimedia.org/wiki/File:Capoeiristas_no_Terreiro_de_Jesus_3.webm",
+        label: "GIF na experiência AR: Djino, \"Ginga de dos.gif\" (Wikimedia Commons, CC BY-SA)",
+        url: "https://commons.wikimedia.org/wiki/File:Ginga_de_dos.gif",
         contexts: ["ar"]
       }
     ],
     siteEmbedUrl:
       "https://sketchfab.com/models/01e0d2a4914c46a1a79b46d0fc56483a/embed?autostart=1&internal=1&tracking=0&ui_ar=0&ui_infos=0&ui_snapshots=0&ui_stop=0&ui_theatre=1&ui_watermark=0",
-    image: "/images/patrimonio-imaterial-capoeira.jpg",
-    video: "/videos/ginga.webm"
+    embedZoomOutFactor: 1.18,
+    mediaWidth: 360,
+    mediaHeight: 240,
+    arMediaWidth: 360,
+    arMediaHeight: 240,
+    image: "/gifs/ginga.gif"
   },
   {
     kind: "model",
@@ -203,6 +223,10 @@ export const slides: Slide[] = [
         url: "https://commons.wikimedia.org/wiki/File:Musicos_da_Capoeira_Angola.jpg"
       }
     ],
+    mediaWidth: 4288,
+    mediaHeight: 2848,
+    arMediaWidth: 4288,
+    arMediaHeight: 2848,
     image: "/images/musicos-capoeira-angola.jpg"
   }
 ];

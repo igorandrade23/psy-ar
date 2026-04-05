@@ -1,5 +1,4 @@
 import { SlideAudioButton } from "./components/SlideAudioButton";
-import Link from "next/link";
 import { SlideContent } from "./components/SlideContent";
 import { SlideFeedMedia } from "./components/SlideFeedMedia";
 import { slides } from "./lib/slides";
@@ -11,9 +10,6 @@ export default function HomePage() {
       <section className={styles.hero}>
         <span className={styles.kicker}>Museu de Capoeira</span>
         <h1 className={styles.title}>Museu Virtual da Capoeira</h1>
-        <Link href="/ar" className={styles.arLink}>
-          Experimente em Realidade Aumentada
-        </Link>
       </section>
 
       <section className={styles.feed} aria-label="Feed de imagens e descrições">

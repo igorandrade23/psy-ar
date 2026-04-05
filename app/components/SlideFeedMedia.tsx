@@ -2,6 +2,7 @@
 
 import { Suspense, useEffect, useMemo, useRef, useState } from "react";
 import Image from "next/image";
+import Script from "next/script";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { Center, OrbitControls, Stage, useGLTF } from "@react-three/drei";
 import type { Group } from "three";
@@ -12,6 +13,11 @@ import styles from "./SlideFeedMedia.module.css";
 type SlideFeedMediaProps = {
   slide: Slide;
 };
+
+function getSketchfabUid(siteEmbedUrl: string) {
+  const match = siteEmbedUrl.match(/\/models\/([a-z0-9]+)\/embed/i);
+  return match?.[1] ?? null;
+}
 
 function getModelScale(assetId: string) {
   if (assetId === "slide-berimbau2") {
@@ -51,10 +57,16 @@ export function SlideFeedMedia({ slide }: SlideFeedMediaProps) {
   }
 
   if (slide.kind === "image") {
+    const mediaAspectRatio =
+      slide.mediaWidth && slide.mediaHeight ? slide.mediaWidth / slide.mediaHeight : 4 / 5;
+
     if (slide.video) {
       return (
-        <div className={`${styles.mediaFrame} ${styles.videoFrame}`}>
-          <div className={styles.videoShell}>
+        <div
+          className={`${styles.mediaFrame} ${styles.videoFrame}`}
+          style={{ aspectRatio: `${slide.mediaWidth ?? 16} / ${slide.mediaHeight ?? 9}` }}
+        >
+          <div className={styles.videoShell} style={{ aspectRatio: `${mediaAspectRatio}` }}>
             <video
               className={`${styles.video} ${styles.videoContained}`}
               src={slide.video}
@@ -71,7 +83,7 @@ export function SlideFeedMedia({ slide }: SlideFeedMediaProps) {
     }
 
     return (
-      <div className={styles.mediaFrame}>
+      <div className={styles.mediaFrame} style={{ aspectRatio: `${mediaAspectRatio}` }}>
         <Image src={slide.image} alt={slide.title} fill className={styles.image} />
         <span className={styles.badge}>Imagem</span>
       </div>
@@ -82,20 +94,77 @@ export function SlideFeedMedia({ slide }: SlideFeedMediaProps) {
 }
 
 function EmbedMedia({ slide }: { slide: Slide }) {
+  const iframeRef = useRef<HTMLIFrameElement | null>(null);
+  const [isViewerApiReady, setIsViewerApiReady] = useState(() => {
+    return typeof window !== "undefined" && typeof window.Sketchfab !== "undefined";
+  });
+  const viewerUid = slide.siteEmbedUrl ? getSketchfabUid(slide.siteEmbedUrl) : null;
+  const shouldControlCamera = Boolean(slide.embedZoomOutFactor && viewerUid);
+
+  useEffect(() => {
+    if (!shouldControlCamera || !isViewerApiReady || !iframeRef.current || !window.Sketchfab || !viewerUid) {
+      return;
+    }
+
+    let cancelled = false;
+    const client = new window.Sketchfab("1.12.1", iframeRef.current);
+
+    client.init(viewerUid, {
+      autostart: 1,
+      camera: 0,
+      ui_ar: 0,
+      ui_infos: 0,
+      ui_snapshots: 0,
+      ui_stop: 0,
+      ui_theatre: 1,
+      ui_watermark: 0,
+      success(api) {
+        api.start();
+        api.addEventListener("viewerready", () => {
+          if (cancelled) {
+            return;
+          }
+
+          api.getCameraLookAt((error, camera) => {
+            if (error || cancelled) {
+              return;
+            }
+
+            const factor = slide.embedZoomOutFactor ?? 1;
+            const adjustedPosition = camera.position.map((coordinate, index) => {
+              const targetCoordinate = camera.target[index] ?? 0;
+              return targetCoordinate + (coordinate - targetCoordinate) * factor;
+            });
+
+            api.setCameraLookAt(adjustedPosition, camera.target, 0);
+          });
+        });
+      },
+      error() {}
+    });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [isViewerApiReady, shouldControlCamera, slide.embedZoomOutFactor, viewerUid]);
+
   return (
-    <div className={`${styles.mediaFrame} ${styles.modelFrame}`}>
+    <div className={`${styles.mediaFrame} ${styles.modelFrame}`} style={{ aspectRatio: "4 / 5" }}>
+      {shouldControlCamera ? (
+        <Script
+          src="https://static.sketchfab.com/api/sketchfab-viewer-1.12.1.js"
+          strategy="afterInteractive"
+          onLoad={() => setIsViewerApiReady(true)}
+        />
+      ) : null}
       <iframe
+        ref={iframeRef}
         className={styles.embed}
         title={slide.title}
-        src={slide.siteEmbedUrl}
+        src={shouldControlCamera ? undefined : slide.siteEmbedUrl}
         allow="autoplay; fullscreen; xr-spatial-tracking"
         allowFullScreen
       />
-      <div className={styles.instrumentHint}>
-        {slide.kind === "model"
-          ? "Use o visor incorporado para inspecionar em 3D."
-          : "Use o visor incorporado para ver o movimento com mais qualidade no site."}
-      </div>
       <span className={styles.badge}>{slide.kind === "model" ? "Modelo 3D" : "3D incorporado"}</span>
     </div>
   );

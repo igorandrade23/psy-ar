@@ -18,20 +18,18 @@ export default function HomePage() {
   const [cameraState, setCameraState] = useState<CameraState>("checking");
   const [descriptionExpanded, setDescriptionExpanded] = useState(false);
   const [isAudioPlaying, setIsAudioPlaying] = useState(false);
-  const [isVideoPlaying, setIsVideoPlaying] = useState(false);
   const [mediaAspectRatio, setMediaAspectRatio] = useState(1.5);
   const audioRef = useRef<HTMLAudioElement | null>(null);
-  const videoTextureRef = useRef<HTMLVideoElement | null>(null);
-  const imageTextureRef = useRef<HTMLImageElement | null>(null);
 
   const currentSlide = useMemo(() => slides[slideIndex], [slideIndex]);
   const isExperienceReady = coreScriptsLoaded >= 2 && pluginsReady >= 2;
   const canStartExperience = !needsSecureContext && cameraState === "ready";
-  const imagePlaneHeight = 1.02;
-  const imagePlaneWidth =
-    currentSlide.kind === "image"
-      ? Math.min(Math.max(imagePlaneHeight * mediaAspectRatio, 0.65), 1.9)
-      : 1.55;
+  const activeContentId = `ar-active-${currentSlide.assetId}`;
+  const basePlaneHeight = 1.02;
+  const baseLongSide = 1.28;
+  const basePlaneWidth = mediaAspectRatio >= 1 ? baseLongSide : baseLongSide * mediaAspectRatio;
+  const normalizedPlaneHeight =
+    mediaAspectRatio >= 1 ? baseLongSide / mediaAspectRatio : baseLongSide;
 
   const requestCameraAccess = async () => {
     if (!navigator.mediaDevices?.getUserMedia) {
@@ -122,39 +120,27 @@ export default function HomePage() {
   }, [slideIndex]);
 
   useEffect(() => {
-    setIsVideoPlaying(false);
-  }, [slideIndex]);
-
-  useEffect(() => {
     if (currentSlide.kind !== "image") {
       return;
     }
 
-    setMediaAspectRatio(1.5);
-  }, [slideIndex, currentSlide]);
+    let cancelled = false;
+    const image = new Image();
 
-  useEffect(() => {
-    if (currentSlide.kind !== "image" || currentSlide.video) {
-      return;
-    }
+    image.onload = () => {
+      if (cancelled) {
+        return;
+      }
 
-    const image = imageTextureRef.current;
-
-    if (!image) {
-      return;
-    }
-
-    const syncAspectRatio = () => {
       if (image.naturalWidth > 0 && image.naturalHeight > 0) {
         setMediaAspectRatio(image.naturalWidth / image.naturalHeight);
       }
     };
 
-    syncAspectRatio();
-    image.addEventListener("load", syncAspectRatio);
+    image.src = currentSlide.image;
 
     return () => {
-      image.removeEventListener("load", syncAspectRatio);
+      cancelled = true;
     };
   }, [currentSlide]);
 
@@ -354,84 +340,6 @@ export default function HomePage() {
     }
   }, [markerVisible]);
 
-  useEffect(() => {
-    const video = videoTextureRef.current;
-
-    if (!video) {
-      return;
-    }
-
-    if (currentSlide.kind !== "image" || !currentSlide.video) {
-      video.pause();
-      video.currentTime = 0;
-      setIsVideoPlaying(false);
-      return;
-    }
-
-    video.muted = true;
-    video.defaultMuted = true;
-    video.loop = true;
-    video.playsInline = true;
-    video.setAttribute("muted", "");
-    video.setAttribute("loop", "");
-    video.setAttribute("playsinline", "true");
-    video.setAttribute("webkit-playsinline", "true");
-    video.load();
-
-    const syncAspectRatio = () => {
-      if (video.videoWidth > 0 && video.videoHeight > 0) {
-        setMediaAspectRatio(video.videoWidth / video.videoHeight);
-      }
-    };
-
-    const tryPlay = async () => {
-      try {
-        await video.play();
-        setIsVideoPlaying(true);
-      } catch {
-        setIsVideoPlaying(false);
-      }
-    };
-
-    const handlePause = () => {
-      setIsVideoPlaying(false);
-    };
-
-    if (markerVisible) {
-      void tryPlay();
-    }
-
-    video.addEventListener("canplay", tryPlay);
-    video.addEventListener("loadedmetadata", syncAspectRatio);
-    video.addEventListener("pause", handlePause);
-    syncAspectRatio();
-
-    return () => {
-      video.removeEventListener("canplay", tryPlay);
-      video.removeEventListener("loadedmetadata", syncAspectRatio);
-      video.removeEventListener("pause", handlePause);
-      video.pause();
-      video.currentTime = 0;
-      setIsVideoPlaying(false);
-    };
-  }, [currentSlide, markerVisible]);
-
-  useEffect(() => {
-    if (markerVisible) {
-      return;
-    }
-
-    const video = videoTextureRef.current;
-
-    if (!video) {
-      return;
-    }
-
-    video.pause();
-    video.currentTime = 0;
-    setIsVideoPlaying(false);
-  }, [markerVisible]);
-
   const moveSlide = (direction: -1 | 1) => {
     setSlideIndex((current) => (current + direction + slides.length) % slides.length);
   };
@@ -451,18 +359,47 @@ export default function HomePage() {
       window.removeEventListener("pointerup", stop);
       window.removeEventListener("pointercancel", stop);
       window.removeEventListener("pointerleave", stop);
+      window.removeEventListener("mouseup", stop);
+      window.removeEventListener("touchend", stop);
+      window.removeEventListener("touchcancel", stop);
     };
 
     window.addEventListener("pointerup", stop);
     window.addEventListener("pointercancel", stop);
     window.addEventListener("pointerleave", stop);
+    window.addEventListener("mouseup", stop);
+    window.addEventListener("touchend", stop);
+    window.addEventListener("touchcancel", stop);
+  };
+
+  const handleContinuousControlStart = (
+    event:
+      | React.MouseEvent<HTMLButtonElement>
+      | React.TouchEvent<HTMLButtonElement>
+      | React.PointerEvent<HTMLButtonElement>,
+    kind: "scale" | "rotateX" | "rotateY",
+    value: number
+  ) => {
+    event.stopPropagation();
+    startContinuousTransform(kind, value);
+  };
+
+  const handleActionButton = (
+    event:
+      | React.MouseEvent<HTMLButtonElement>
+      | React.TouchEvent<HTMLButtonElement>
+      | React.PointerEvent<HTMLButtonElement>,
+    action: () => void
+  ) => {
+    event.stopPropagation();
+    action();
   };
 
   const transformActiveContent = (
     kind: "scale" | "rotateX" | "rotateY",
     value: number
   ) => {
-    const activeEntity = document.querySelector("#hiro-marker .clickable");
+    const activeEntity = document.getElementById(activeContentId);
 
     if (!(activeEntity instanceof HTMLElement) || !("object3D" in activeEntity)) {
       return;
@@ -480,11 +417,11 @@ export default function HomePage() {
     if (kind === "scale") {
       const defaultMinScale =
         currentSlide.kind === "image"
-          ? 0.35
+          ? 0.2
           : Math.max(Number.parseFloat(currentSlide.scale.split(" ")[0]) * 0.5, 0.01);
       const defaultMaxScale =
         currentSlide.kind === "image"
-          ? 12
+          ? 20
           : Math.max(Number.parseFloat(currentSlide.scale.split(" ")[0]) * 8, defaultMinScale * 2);
       const minScale = currentSlide.kind === "model" && currentSlide.minScale ? currentSlide.minScale : defaultMinScale;
       const maxScale = currentSlide.kind === "model" && currentSlide.maxScale ? currentSlide.maxScale : defaultMaxScale;
@@ -502,7 +439,7 @@ export default function HomePage() {
   };
 
   const resetActiveContent = () => {
-    const activeEntity = document.querySelector("#hiro-marker .clickable");
+    const activeEntity = document.getElementById(activeContentId);
 
     if (!(activeEntity instanceof HTMLElement) || !("object3D" in activeEntity)) {
       return;
@@ -562,28 +499,6 @@ export default function HomePage() {
     setIsAudioPlaying(false);
   };
 
-  const toggleVideoTexture = async () => {
-    const video = videoTextureRef.current;
-
-    if (!video || currentSlide.kind !== "image" || !currentSlide.video) {
-      return;
-    }
-
-    if (video.paused) {
-      try {
-        await video.play();
-        setIsVideoPlaying(true);
-      } catch {
-        setIsVideoPlaying(false);
-      }
-
-      return;
-    }
-
-    video.pause();
-    setIsVideoPlaying(false);
-  };
-
   return (
     <main className={styles.page}>
       <Script
@@ -630,24 +545,6 @@ export default function HomePage() {
             arjs="trackingMethod: best; sourceType: webcam; facingMode: environment; debugUIEnabled: false;"
             gesture-detector
           >
-            <a-assets timeout="30000">
-              {currentSlide.kind === "image" ? (
-                <img id="slide-image-texture" ref={imageTextureRef} src={currentSlide.image} alt="" />
-              ) : null}
-              {currentSlide.kind === "image" && currentSlide.video ? (
-                <video
-                  id="slide-video-texture"
-                  ref={videoTextureRef}
-                  src={currentSlide.video}
-                  muted
-                  loop
-                  playsInline
-                  autoPlay
-                  preload="auto"
-                  crossOrigin="anonymous"
-                />
-              ) : null}
-            </a-assets>
             <a-marker
               id="hiro-marker"
               preset="hiro"
@@ -657,32 +554,22 @@ export default function HomePage() {
             >
               {currentSlide.kind === "image" ? (
                 <a-entity
+                  id={activeContentId}
                   class="clickable"
                   scale="1.5 1.5 1.5"
                   safe-look-at="target: #main-camera"
                 >
-                  {currentSlide.video && isVideoPlaying ? (
-                    <a-video
-                      key={currentSlide.assetId}
-                      src="#slide-video-texture"
-                      position="0 0 0"
-                      rotation="0 0 0"
-                      width={String(imagePlaneWidth)}
-                      height={String(imagePlaneHeight)}
-                    />
-                  ) : (
-                    <a-image
-                      key={currentSlide.assetId}
-                      src="#slide-image-texture"
-                      position="0 0 0"
-                      rotation="0 0 0"
-                      width={String(imagePlaneWidth)}
-                      height={String(imagePlaneHeight)}
-                    />
-                  )}
+                  <a-entity
+                    key={currentSlide.assetId}
+                    position="0 0 0"
+                    rotation="0 0 0"
+                    geometry={`primitive: plane; width: ${basePlaneWidth}; height: ${normalizedPlaneHeight}`}
+                    material={`src: url(${currentSlide.image}); shader: flat; side: double; transparent: false; color: #fff;`}
+                  />
                 </a-entity>
               ) : (
                 <a-entity
+                  id={activeContentId}
                   class="clickable"
                   gesture-handler="minScale: 0.3; maxScale: 4"
                   position={currentSlide.position}
@@ -783,7 +670,8 @@ export default function HomePage() {
             <button
               className={styles.quickActionButton}
               type="button"
-              onPointerDown={() => startContinuousTransform("scale", 1.15)}
+              onMouseDown={(event) => handleContinuousControlStart(event, "scale", 1.15)}
+              onTouchStart={(event) => handleContinuousControlStart(event, "scale", 1.15)}
               onContextMenu={(event) => event.preventDefault()}
               aria-label="Aumentar conteudo"
             >
@@ -792,7 +680,8 @@ export default function HomePage() {
             <button
               className={styles.quickActionButton}
               type="button"
-              onPointerDown={() => startContinuousTransform("scale", 0.87)}
+              onMouseDown={(event) => handleContinuousControlStart(event, "scale", 0.87)}
+              onTouchStart={(event) => handleContinuousControlStart(event, "scale", 0.87)}
               onContextMenu={(event) => event.preventDefault()}
               aria-label="Diminuir conteudo"
             >
@@ -803,7 +692,8 @@ export default function HomePage() {
             <button
               className={styles.quickActionButton}
               type="button"
-              onPointerDown={resetActiveContent}
+              onClick={(event) => handleActionButton(event, resetActiveContent)}
+              onTouchStart={(event) => handleActionButton(event, resetActiveContent)}
               onContextMenu={(event) => event.preventDefault()}
               aria-label="Resetar conteudo"
             >
@@ -813,21 +703,12 @@ export default function HomePage() {
               <button
                 className={styles.quickActionButton}
                 type="button"
-                onPointerDown={toggleModelAudio}
+                onClick={(event) => handleActionButton(event, toggleModelAudio)}
+                onTouchStart={(event) => handleActionButton(event, toggleModelAudio)}
                 onContextMenu={(event) => event.preventDefault()}
                 aria-label={isAudioPlaying ? "Pausar audio do instrumento" : "Tocar audio do instrumento"}
               >
                 {isAudioPlaying ? "❚❚" : "▶"}
-              </button>
-            ) : currentSlide.kind === "image" && currentSlide.video ? (
-              <button
-                className={styles.quickActionButton}
-                type="button"
-                onPointerDown={() => void toggleVideoTexture()}
-                onContextMenu={(event) => event.preventDefault()}
-                aria-label={isVideoPlaying ? "Pausar video" : "Iniciar video"}
-              >
-                {isVideoPlaying ? "❚❚" : "▶"}
               </button>
             ) : (
               <span className={styles.quickActionSpacer} aria-hidden="true" />
@@ -838,7 +719,12 @@ export default function HomePage() {
               <button
                 className={styles.quickActionButton}
                 type="button"
-                onPointerDown={() => startContinuousTransform("rotateX", -Math.PI / 18)}
+                onMouseDown={(event) =>
+                  handleContinuousControlStart(event, "rotateX", -Math.PI / 18)
+                }
+                onTouchStart={(event) =>
+                  handleContinuousControlStart(event, "rotateX", -Math.PI / 18)
+                }
                 onContextMenu={(event) => event.preventDefault()}
                 aria-label="Mover para cima"
               >
@@ -847,7 +733,12 @@ export default function HomePage() {
               <button
                 className={styles.quickActionButton}
                 type="button"
-                onPointerDown={() => startContinuousTransform("rotateX", Math.PI / 18)}
+                onMouseDown={(event) =>
+                  handleContinuousControlStart(event, "rotateX", Math.PI / 18)
+                }
+                onTouchStart={(event) =>
+                  handleContinuousControlStart(event, "rotateX", Math.PI / 18)
+                }
                 onContextMenu={(event) => event.preventDefault()}
                 aria-label="Mover para baixo"
               >
@@ -860,7 +751,12 @@ export default function HomePage() {
               <button
                 className={styles.quickActionButton}
                 type="button"
-                onPointerDown={() => startContinuousTransform("rotateY", -Math.PI / 18)}
+                onMouseDown={(event) =>
+                  handleContinuousControlStart(event, "rotateY", -Math.PI / 18)
+                }
+                onTouchStart={(event) =>
+                  handleContinuousControlStart(event, "rotateY", -Math.PI / 18)
+                }
                 onContextMenu={(event) => event.preventDefault()}
                 aria-label="Mover para a esquerda"
               >
@@ -869,7 +765,12 @@ export default function HomePage() {
               <button
                 className={styles.quickActionButton}
                 type="button"
-                onPointerDown={() => startContinuousTransform("rotateY", Math.PI / 18)}
+                onMouseDown={(event) =>
+                  handleContinuousControlStart(event, "rotateY", Math.PI / 18)
+                }
+                onTouchStart={(event) =>
+                  handleContinuousControlStart(event, "rotateY", Math.PI / 18)
+                }
                 onContextMenu={(event) => event.preventDefault()}
                 aria-label="Mover para a direita"
               >
