@@ -529,7 +529,7 @@ export default function HomePage() {
             <span className={styles.loadingTag}>Camera necessaria</span>
             <h1>Ative sua camera</h1>
             <p>
-              Clique em Permitir para liberar o acesso a camera e entrar no Museu Virtual da Capoeira. O museu utiliza a camera para detectar o marcador Hiro e exibir os conteudos em realidade aumentada, mas nao tem acesso a nenhum outro dado da camera ou do dispositivo.
+              Clique em Permitir para liberar o acesso a camera e entrar em Capoeira em corpo e historia. A experiencia utiliza a camera para detectar o marcador Hiro e exibir os conteudos em realidade aumentada, mas nao tem acesso a nenhum outro dado da camera ou do dispositivo.
             </p>
           </div>
         </div>
@@ -596,7 +596,7 @@ export default function HomePage() {
             <span className={styles.loadingTag}>Acesso bloqueado</span>
             <h1>Ative sua camera</h1>
             <p>
-              Para entrar no Museu Virtual da Capoeira, permita o acesso a camera no navegador e
+              Para entrar em Capoeira em corpo e historia, permita o acesso a camera no navegador e
               tente novamente.
             </p>
             <div className={styles.cameraActions}>
@@ -613,7 +613,7 @@ export default function HomePage() {
         <div className={styles.cameraNotice} aria-live="assertive">
           <div className={styles.cameraNoticeCard}>
             <span className={styles.loadingTag}>Camera indisponivel</span>
-            <h1>Não foi possível acessar o Museu Virtual da Capoeira pois sua câmera não funciona</h1>
+            <h1>Nao foi possivel acessar Capoeira em corpo e historia porque sua camera nao esta funcionando</h1>
             <p>
               Verifique se o dispositivo possui uma camera ativa, se ela nao esta sendo usada por
               outro app e tente novamente.
@@ -632,10 +632,10 @@ export default function HomePage() {
           <div className={styles.loadingCard}>
             <div className={styles.loadingOrb} />
             <span className={styles.loadingTag}>Preparando a experiencia</span>
-            <h1>Carregando o Museu Virtual da Capoeira</h1>
+            <h1>Carregando Capoeira em corpo e historia</h1>
             <p>
               Organizando camera, marcador e conteudos para iniciar a experiencia em realidade
-              aumentada do museu.
+              aumentada.
             </p>
           </div>
         </div>
@@ -790,7 +790,7 @@ export default function HomePage() {
             <span className={styles.counter}>
               {slideIndex + 1}/{slides.length}
             </span>
-            <span className={styles.tag}>Museu Virtual da Capoeira</span>
+            <span className={styles.tag}>Capoeira em corpo e historia</span>
           </div>
 
           <SlideContent

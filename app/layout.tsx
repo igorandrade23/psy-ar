@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Museu Virtual da Capoeira",
-  description: "Experiencia em realidade aumentada do Museu Virtual da Capoeira."
+  title: "Capoeira em corpo e historia",
+  description: "Experiencia web e em realidade aumentada sobre capoeira, corpo, memoria e historia."
 };
 
 type RootLayoutProps = {

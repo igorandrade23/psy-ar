@@ -44,8 +44,16 @@ export function SlideAudioButton({ slide }: SlideAudioButtonProps) {
   };
 
   return (
-    <button className={styles.button} type="button" onClick={toggleAudio}>
-      {isPlaying ? "Pausar som" : "Tocar som"}
+    <button
+      className={styles.button}
+      type="button"
+      onClick={toggleAudio}
+      aria-label={isPlaying ? "Pausar som do instrumento" : "Tocar som do instrumento"}
+      title={isPlaying ? "Pausar som" : "Tocar som"}
+    >
+      <span className={styles.icon} aria-hidden="true">
+        {isPlaying ? "❚❚" : "▶"}
+      </span>
     </button>
   );
 }

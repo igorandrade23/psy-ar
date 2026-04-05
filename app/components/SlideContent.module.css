@@ -1,7 +1,14 @@
 .content {
   display: grid;
   gap: 10px;
-  color: #f3ead9;
+  color: var(--color-bg);
+}
+
+.titleRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
 }
 
 .title {
@@ -20,7 +27,7 @@
 }
 
 .details {
-  color: rgba(243, 234, 217, 0.88);
+  color: rgba(243, 231, 211, 0.88);
   font-size: 0.9rem;
 }
 
@@ -41,7 +48,7 @@
 }
 
 .referencesTitle {
-  color: #f6d9a6;
+  color: var(--color-gold);
   font-size: 0.78rem;
   font-weight: 700;
   letter-spacing: 0.04em;
@@ -51,7 +58,7 @@
 .referencesList {
   margin: 0;
   padding-left: 18px;
-  color: rgba(243, 234, 217, 0.74);
+  color: rgba(243, 231, 211, 0.74);
   font-size: 0.8rem;
   line-height: 1.45;
 }
@@ -67,7 +74,7 @@
   padding: 0;
   border: 0;
   background: transparent;
-  color: #f6d9a6;
+  color: var(--color-gold);
   font-size: 0.84rem;
   font-weight: 700;
   text-align: left;
@@ -75,21 +82,21 @@
 }
 
 .toneDark {
-  color: #20160d;
+  color: var(--color-ink);
 }
 
 .toneDark .details {
-  color: rgba(32, 22, 13, 0.82);
+  color: var(--color-text-muted);
 }
 
 .toneDark .referencesTitle {
-  color: #7e4513;
+  color: var(--color-gold);
 }
 
 .toneDark .referencesList {
-  color: rgba(32, 22, 13, 0.68);
+  color: rgba(246, 234, 216, 0.66);
 }
 
 .toneDark .textToggle {
-  color: #7e4513;
+  color: var(--color-sand);
 }

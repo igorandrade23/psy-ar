@@ -22,7 +22,7 @@ export default function MarkerPage() {
       >
         <div>
           <h1 style={{ margin: "0 0 10px", fontSize: "1.8rem" }}>
-            Marcador do Museu Virtual da Capoeira
+            Marcador de Capoeira em corpo e historia
           </h1>
           <p style={{ margin: 0, lineHeight: 1.5 }}>
             Abra esta tela em outro dispositivo ou imprima a imagem abaixo para testar a

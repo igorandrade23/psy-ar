@@ -12,7 +12,6 @@ export type Slide = {
   references: string[];
   mediaSources?: SlideSource[];
   siteEmbedUrl?: string;
-  embedZoomOutFactor?: number;
   mediaWidth?: number;
   mediaHeight?: number;
   arMediaWidth?: number;
@@ -45,7 +44,10 @@ export const slides: Slide[] = [
       "Registros do século XIX mostram que a capoeira já circulava em cidades brasileiras como prática corporal, luta, jogo e forma de sociabilidade entre populações negras.",
     details:
       "A pintura atribuída a Augustus Earle costuma ser utilizada em estudos históricos como um dos registros visuais mais conhecidos de uma prática semelhante à capoeira no Brasil oitocentista. Ao apresentar corpo, confronto, ritmo e observação coletiva, a imagem ajuda a compreender a capoeira como manifestação social e não apenas como técnica de combate.",
-    references: ["Ribeiro, D. (2015). O povo brasileiro: a formação e o sentido do Brasil. Global Editora e Distribuidora Ltda."],
+    references: [
+      "Assunção, M. R. (2005). Capoeira: The history of an Afro-Brazilian martial art. Routledge.",
+      "Instituto do Patrimônio Histórico e Artístico Nacional. (2014). Roda de capoeira e ofício dos mestres de capoeira. IPHAN."
+    ],
     mediaSources: [
       {
         label: "Imagem: Augustus Earle, \"CapoeiraEarle.JPG\"",
@@ -66,7 +68,10 @@ export const slides: Slide[] = [
       "Ao longo de sua história, a capoeira foi alvo de perseguição e estigma, mas permaneceu viva por meio da transmissão entre mestres, rodas e comunidades.",
     details:
       "A criminalização da capoeira em diferentes momentos da história brasileira não impediu sua continuidade. A prática persistiu porque esteve vinculada a redes de pertencimento, memória e formação coletiva. Por isso, estudar capoeira exige observá-la como experiência histórica de resistência cultural e reinvenção social.",
-    references: ["Sodré, M. (2019). O terreiro e a cidade: a forma social negro-brasileira. Mauad Editora Ltda."],
+    references: [
+      "Assunção, M. R. (2005). Capoeira: The history of an Afro-Brazilian martial art. Routledge.",
+      "Instituto do Patrimônio Histórico e Artístico Nacional. (2014). Roda de capoeira e ofício dos mestres de capoeira. IPHAN."
+    ],
     mediaSources: [
       {
         label: "Imagem: Julia Rubinic, \"Capoeira in Salvador Brazil\"",
@@ -87,7 +92,10 @@ export const slides: Slide[] = [
       "Hoje, a capoeira é reconhecida como patrimônio cultural e segue ativa em escolas, projetos, academias, grupos comunitários e rodas públicas.",
     details:
       "Esse reconhecimento institucional não encerra a história da capoeira; ao contrário, reforça sua permanência como prática viva, transmitida pela experiência do corpo, da música, da oralidade e do convívio. A roda continua sendo espaço de aprendizagem, disciplina, improviso e elaboração de identidade coletiva.",
-    references: ["Roque, Z. S. S. OFÍCIO DOS MESTRES E PANDEMIA NA PERCEPÇÃO DOS CAPOEIRAS: NARRATIVAS E ESTRATÉGIAS NA RODA."],
+    references: [
+      "Instituto do Patrimônio Histórico e Artístico Nacional. (2017). Patrimônio cultural imaterial: salvaguarda da roda de capoeira e do ofício dos mestres de capoeira. IPHAN.",
+      "United Nations Educational, Scientific and Cultural Organization. (2014). Capoeira circle. UNESCO Intangible Cultural Heritage."
+    ],
     mediaSources: [
       {
         label: "Imagem: Clara Angeleas / Ministério da Cidadania, série \"Patrimônio Imaterial Capoeira\"",
@@ -108,7 +116,9 @@ export const slides: Slide[] = [
       "A ginga é o movimento-base da capoeira. Ela organiza o equilíbrio, a defesa, a leitura do jogo e a relação entre ataque e esquiva.",
     details:
       "Mais do que um passo repetido, a ginga produz ritmo, intenção e disponibilidade corporal. Ela ensina o praticante a nunca permanecer estático, a negociar distância e tempo, e a transformar o corpo em linguagem. Por isso, a ginga é frequentemente apresentada como síntese técnica e simbólica da capoeira contemporânea.",
-    references: ["Sodré, M. (2019). O terreiro e a cidade: a forma social negro-brasileira. Mauad Editora Ltda."],
+    references: [
+      "Instituto do Patrimônio Histórico e Artístico Nacional. (2014). Roda de capoeira e ofício dos mestres de capoeira. IPHAN."
+    ],
     mediaSources: [
       {
         label: "Visualização 3D no site: Combat - Capoeira Kick por moveai",
@@ -123,7 +133,6 @@ export const slides: Slide[] = [
     ],
     siteEmbedUrl:
       "https://sketchfab.com/models/01e0d2a4914c46a1a79b46d0fc56483a/embed?autostart=1&internal=1&tracking=0&ui_ar=0&ui_infos=0&ui_snapshots=0&ui_stop=0&ui_theatre=1&ui_watermark=0",
-    embedZoomOutFactor: 1.18,
     mediaWidth: 360,
     mediaHeight: 240,
     arMediaWidth: 360,
@@ -138,7 +147,9 @@ export const slides: Slide[] = [
       "O berimbau orienta a roda e ajuda a definir o tipo de jogo, o andamento do toque e a atenção dos participantes.",
     details:
       "Na roda de capoeira, o berimbau ocupa lugar central porque estrutura o ritmo e sinaliza modos distintos de jogar. Seu som não funciona apenas como acompanhamento: ele organiza a dinâmica da roda, orienta entradas e reforça a relação entre música, disciplina e improviso.",
-    references: ["Sodré, M. (2019). O terreiro e a cidade: a forma social negro-brasileira. Mauad Editora Ltda."],
+    references: [
+      "Instituto do Patrimônio Histórico e Artístico Nacional. (2014). Roda de capoeira e ofício dos mestres de capoeira. IPHAN."
+    ],
     mediaSources: [
       {
         label: "Modelo 3D: Berimbau por luthier.digital",
@@ -164,7 +175,9 @@ export const slides: Slide[] = [
       "O pandeiro complementa a roda com marcação rítmica, balanço e resposta ao toque principal do berimbau.",
     details:
       "Na capoeira, o pandeiro reforça a pulsação da roda e contribui para a densidade sonora do conjunto. Seu uso aproxima a capoeira de outros campos da música popular brasileira e evidencia que a roda articula corpo, canto, percussão e escuta coletiva.",
-    references: ["Sodré, M. (2019). O terreiro e a cidade: a forma social negro-brasileira. Mauad Editora Ltda."],
+    references: [
+      "Instituto do Patrimônio Histórico e Artístico Nacional. (2014). Roda de capoeira e ofício dos mestres de capoeira. IPHAN."
+    ],
     mediaSources: [
       {
         label: "Modelo 3D: Pandeiro samba instrument por HQ3DMOD",
@@ -190,7 +203,9 @@ export const slides: Slide[] = [
       "O atabaque amplia a base percussiva da roda e ajuda a sustentar a energia coletiva da música e do canto.",
     details:
       "Embora o berimbau costume ocupar o centro simbólico da roda, o atabaque contribui para a sustentação do ritmo e reforça a presença de matrizes percussivas afro-brasileiras. Seu timbre grave ajuda a construir ambiência, intensidade e coesão entre movimento corporal e acompanhamento musical.",
-    references: ["Sodré, M. (2019). O terreiro e a cidade: a forma social negro-brasileira. Mauad Editora Ltda."],
+    references: [
+      "Instituto do Patrimônio Histórico e Artístico Nacional. (2014). Roda de capoeira e ofício dos mestres de capoeira. IPHAN."
+    ],
     mediaSources: [
       {
         label: "Modelo 3D: Atabaque por luthier.digital",
@@ -216,7 +231,10 @@ export const slides: Slide[] = [
       "A roda contemporânea articula jogo, música, canto, memória e convivência, mantendo a capoeira como prática coletiva e elemento cultural vivo.",
     details:
       "Em contextos contemporâneos, a roda preserva dimensões históricas da capoeira ao mesmo tempo que dialoga com escola, turismo, políticas de patrimônio e formação artística. A presença de músicos e praticantes no mesmo espaço mostra que a capoeira continua sendo, ao mesmo tempo, arte, pedagogia, performance e experiência comunitária.",
-    references: ["Roque, Z. S. S. OFÍCIO DOS MESTRES E PANDEMIA NA PERCEPÇÃO DOS CAPOEIRAS: NARRATIVAS E ESTRATÉGIAS NA RODA."],
+    references: [
+      "Instituto do Patrimônio Histórico e Artístico Nacional. (2017). Patrimônio cultural imaterial: salvaguarda da roda de capoeira e do ofício dos mestres de capoeira. IPHAN.",
+      "United Nations Educational, Scientific and Cultural Organization. (2014). Capoeira circle. UNESCO Intangible Cultural Heritage."
+    ],
     mediaSources: [
       {
         label: "Imagem: Projeto Transite, \"Musicos da Capoeira Angola\"",

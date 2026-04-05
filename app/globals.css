@@ -1,11 +1,27 @@
+:root {
+  --color-bg: #110d0d;
+  --color-sand: #d8b98c;
+  --color-clay: #b46436;
+  --color-wood: #f2d7af;
+  --color-ink: #f6ead8;
+  --color-gold: #d39a3c;
+  --color-surface: rgba(30, 20, 18, 0.88);
+  --color-surface-strong: #fff4e4;
+  --color-border: rgba(216, 185, 140, 0.14);
+  --color-shadow: rgba(0, 0, 0, 0.38);
+  --color-media-dark: #140f0d;
+  --color-media-dark-soft: #271814;
+  --color-text-muted: rgba(246, 234, 216, 0.74);
+}
+
 html,
 body {
   width: 100%;
   height: 100%;
   margin: 0;
   padding: 0;
-  background: #efe4d1;
-  color: #20160d;
+  background: var(--color-bg);
+  color: var(--color-ink);
   font-family: Arial, Helvetica, sans-serif;
 }
 

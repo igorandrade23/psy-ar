@@ -41,10 +41,12 @@ export function SlideContent({
         .filter(Boolean)
         .join(" ")}
     >
-      <h2 className={[styles.title, compact ? styles.titleCompact : "", titleClassName].filter(Boolean).join(" ")}>
-        {slide.title}
-      </h2>
-      {afterTitle}
+      <div className={styles.titleRow}>
+        <h2 className={[styles.title, compact ? styles.titleCompact : "", titleClassName].filter(Boolean).join(" ")}>
+          {slide.title}
+        </h2>
+        {afterTitle}
+      </div>
       <p className={expanded ? styles.descriptionExpanded : styles.descriptionCollapsed}>
         {slide.description}
       </p>

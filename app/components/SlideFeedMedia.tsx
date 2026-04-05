@@ -2,7 +2,6 @@
 
 import { Suspense, useEffect, useMemo, useRef, useState } from "react";
 import Image from "next/image";
-import Script from "next/script";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { Center, OrbitControls, Stage, useGLTF } from "@react-three/drei";
 import type { Group } from "three";
@@ -13,11 +12,6 @@ import styles from "./SlideFeedMedia.module.css";
 type SlideFeedMediaProps = {
   slide: Slide;
 };
-
-function getSketchfabUid(siteEmbedUrl: string) {
-  const match = siteEmbedUrl.match(/\/models\/([a-z0-9]+)\/embed/i);
-  return match?.[1] ?? null;
-}
 
 function getModelScale(assetId: string) {
   if (assetId === "slide-berimbau2") {
@@ -77,7 +71,6 @@ export function SlideFeedMedia({ slide }: SlideFeedMediaProps) {
               playsInline
             />
           </div>
-          <span className={styles.badge}>Vídeo</span>
         </div>
       );
     }
@@ -85,7 +78,6 @@ export function SlideFeedMedia({ slide }: SlideFeedMediaProps) {
     return (
       <div className={styles.mediaFrame} style={{ aspectRatio: `${mediaAspectRatio}` }}>
         <Image src={slide.image} alt={slide.title} fill className={styles.image} />
-        <span className={styles.badge}>Imagem</span>
       </div>
     );
   }
@@ -94,78 +86,15 @@ export function SlideFeedMedia({ slide }: SlideFeedMediaProps) {
 }
 
 function EmbedMedia({ slide }: { slide: Slide }) {
-  const iframeRef = useRef<HTMLIFrameElement | null>(null);
-  const [isViewerApiReady, setIsViewerApiReady] = useState(() => {
-    return typeof window !== "undefined" && typeof window.Sketchfab !== "undefined";
-  });
-  const viewerUid = slide.siteEmbedUrl ? getSketchfabUid(slide.siteEmbedUrl) : null;
-  const shouldControlCamera = Boolean(slide.embedZoomOutFactor && viewerUid);
-
-  useEffect(() => {
-    if (!shouldControlCamera || !isViewerApiReady || !iframeRef.current || !window.Sketchfab || !viewerUid) {
-      return;
-    }
-
-    let cancelled = false;
-    const client = new window.Sketchfab("1.12.1", iframeRef.current);
-
-    client.init(viewerUid, {
-      autostart: 1,
-      camera: 0,
-      ui_ar: 0,
-      ui_infos: 0,
-      ui_snapshots: 0,
-      ui_stop: 0,
-      ui_theatre: 1,
-      ui_watermark: 0,
-      success(api) {
-        api.start();
-        api.addEventListener("viewerready", () => {
-          if (cancelled) {
-            return;
-          }
-
-          api.getCameraLookAt((error, camera) => {
-            if (error || cancelled) {
-              return;
-            }
-
-            const factor = slide.embedZoomOutFactor ?? 1;
-            const adjustedPosition = camera.position.map((coordinate, index) => {
-              const targetCoordinate = camera.target[index] ?? 0;
-              return targetCoordinate + (coordinate - targetCoordinate) * factor;
-            });
-
-            api.setCameraLookAt(adjustedPosition, camera.target, 0);
-          });
-        });
-      },
-      error() {}
-    });
-
-    return () => {
-      cancelled = true;
-    };
-  }, [isViewerApiReady, shouldControlCamera, slide.embedZoomOutFactor, viewerUid]);
-
   return (
     <div className={`${styles.mediaFrame} ${styles.modelFrame}`} style={{ aspectRatio: "4 / 5" }}>
-      {shouldControlCamera ? (
-        <Script
-          src="https://static.sketchfab.com/api/sketchfab-viewer-1.12.1.js"
-          strategy="afterInteractive"
-          onLoad={() => setIsViewerApiReady(true)}
-        />
-      ) : null}
       <iframe
-        ref={iframeRef}
         className={styles.embed}
         title={slide.title}
-        src={shouldControlCamera ? undefined : slide.siteEmbedUrl}
+        src={slide.siteEmbedUrl}
         allow="autoplay; fullscreen; xr-spatial-tracking"
         allowFullScreen
       />
-      <span className={styles.badge}>{slide.kind === "model" ? "Modelo 3D" : "3D incorporado"}</span>
     </div>
   );
 }
@@ -213,7 +142,7 @@ function InstrumentMedia({ slide }: { slide: Extract<Slide, { kind: "model" }> }
 
   return (
     <div className={`${styles.mediaFrame} ${styles.modelFrame}`}>
-      <Canvas camera={{ position: [0, 0, 4.2], fov: 34 }}>
+      <Canvas camera={{ position: [0, 0, 5.8], fov: 36 }}>
         <Suspense fallback={null}>
           <Stage intensity={0.5} environment={null} shadows={false} adjustCamera={1.25}>
             <ModelPreview slide={slide} />
@@ -224,16 +153,11 @@ function InstrumentMedia({ slide }: { slide: Extract<Slide, { kind: "model" }> }
           enablePan={false}
           autoRotate={autoRotate}
           autoRotateSpeed={2.2}
-          minDistance={3}
-          maxDistance={6}
+          minDistance={4.1}
+          maxDistance={8.5}
         />
       </Canvas>
       <div className={styles.instrumentActions}>
-        {slide.audio ? (
-          <button className={styles.actionButton} type="button" onClick={toggleAudio}>
-            {isAudioPlaying ? "Pausar som" : "Tocar som"}
-          </button>
-        ) : null}
         <button className={styles.actionButton} type="button" onClick={() => setAutoRotate((current) => !current)}>
           {autoRotate ? "Parar giro" : "Girar"}
         </button>
@@ -242,7 +166,6 @@ function InstrumentMedia({ slide }: { slide: Extract<Slide, { kind: "model" }> }
         </button>
       </div>
       <div className={styles.instrumentHint}>Arraste para girar e use pinça ou roda do mouse para aproximar.</div>
-      <span className={styles.badge}>Modelo 3D</span>
     </div>
   );
 }
